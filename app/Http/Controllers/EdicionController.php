@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Edicion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EdicionController extends Controller
@@ -15,7 +16,9 @@ class EdicionController extends Controller
      */
     public function index()
     {
-       $data = Edicion::all();
+
+    $year = Carbon::now()->year;
+       $data = Edicion::where('anio',$year-1)->get();
        return $data;
     }
 }
