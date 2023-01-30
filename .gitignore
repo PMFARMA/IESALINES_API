@@ -4,7 +4,6 @@
 /storage/*.key
 /vendor
 /storage/geoip/*
-.env
 .env.backup
 .phpunit.result.cache
 Homestead.json
