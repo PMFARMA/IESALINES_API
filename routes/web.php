@@ -17,13 +17,15 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-  return view('welcome');
-})->name('welcome');
+// Route::get('/', function () {
+//   return view('welcome');
+// })->name('welcome');
 
-Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle']);
-Route::get('auth/facebook', [AuthSocialController::class, 'redirectToFacebook']);
-Route::get('auth/google/callback', [AuthSocialController::class, 'handleGoogleCallback']);
-Route::get('auth/facebook/callback', [AuthSocialController::class, 'handleFacebookCallback']);
-Route::get('auth/linkedin', [AuthSocialController::class, 'redirectToLinkedin']);
-Route::get('auth/linkedin/callback', [AuthSocialController::class, 'handleLinkedinCallback']);
+// Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle']);
+// Route::get('auth/facebook', [AuthSocialController::class, 'redirectToFacebook']);
+// Route::get('auth/google/callback', [AuthSocialController::class, 'handleGoogleCallback']);
+// Route::get('auth/facebook/callback', [AuthSocialController::class, 'handleFacebookCallback']);
+// Route::get('auth/linkedin', [AuthSocialController::class, 'redirectToLinkedin']);
+// Route::get('auth/linkedin/callback', [AuthSocialController::class, 'handleLinkedinCallback']);
+
+Route::view('/email', ('formail'))->name('formail');

@@ -7,7 +7,8 @@
     <title>Formulario Email</title>
 </head>
 <body>
-    <form action="{{route('email')}}" method="get">
+    <form action="{{route('storemail')}}" method="post">
+        @csrf {{--En laravel por motivos de seguridad es necesario verificar formularios con un token, al agregar este comando Laravel pone un campo oculto con el token permitiendo el acceso  --}}
         <p><strong>Enviar invitación a</strong></p>
         <p><strong>Asunto:</strong></p>
         <textarea name="asuntotest">{{old('content')}}</textarea>

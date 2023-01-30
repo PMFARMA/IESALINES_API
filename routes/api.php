@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+
 use App\Http\Controllers\MailController;
 
 // //Auth
@@ -10,5 +11,5 @@ use App\Http\Controllers\MailController;
 
 
 //Mail --Laura
-Route::get('/email', ('emails.form-email'))->name('form-email');
-Route::post('/email', [MailController::class, 'storemail'])->name('email');
+
+Route::post('/email', [MailController::class, 'storemail'])->name('storemail');
