@@ -13,14 +13,17 @@ class EmailsMailable extends Mailable
 {
     use Queueable, SerializesModels;
     public $tmsg;
+    public $amsg;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($tmsg)
+    public function __construct($tmsg,$amsg)
     {
         $this->tmsg =$tmsg;
+        $this->amsg = $amsg;
+
     }
 
     /**
@@ -30,8 +33,10 @@ class EmailsMailable extends Mailable
      */
     public function envelope()
     {
+        // return $this->subject($amsg);
         return new Envelope(
-            subject: 'Emails Mailable',
+            // subject: 'Enhorabuena! Has sido seleccionado como Jurado de los Premios Aspid',
+            subject: $this->amsg,
         );
     }
 

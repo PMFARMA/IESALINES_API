@@ -12,10 +12,15 @@ class MailController extends Controller
         // $tmsg = $request->all();
         // return $tmsg;
         $tmsg = $request->validate([
-            "asuntotest" => 'required',
             "emailtest" => 'required',
         ]);
-        Mail::to('lauracatalanruiz11@gmail.com')->send(new EmailsMailable($tmsg));
+        // $amsg = $request->validate([
+        //     "asuntotest" => 'required',
+        // ]);
+        $amsg = $request->get("asuntotest");
+        // $amsg ='Enhorabuena! Has sido seleccionado como Jurado de los Premios Aspid';
+
+        Mail::to('lauracatalanruiz11@gmail.com')->send(new EmailsMailable($tmsg,$amsg));
         return 'Mensaje enviado'; 
     }
 }

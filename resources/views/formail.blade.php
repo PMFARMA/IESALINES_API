@@ -13,7 +13,7 @@
         <p><strong>Asunto:</strong></p>
         <textarea name="asuntotest">{{old('asuntotest')}}</textarea>
         <p><strong>Contenido:</strong></p>
-        <textarea name="emailtest">{{old('emailtest')}}</textarea>
+        <textarea name="emailtest">{{old('content')}}</textarea>
         <button>Enviar</button>
     </form>
 </body>

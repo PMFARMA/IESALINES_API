@@ -7,8 +7,6 @@
     <title>Mensaje enviado</title>
 </head>
 <body>
-    <p>Recibistes un mensaje de:</p>
-    <p><strong>Asunto:</strong>{{$tmsg['asuntotest']}}</p>
-    <p><strong>Contenido:</strong>{{$tmsg['emailtest']}}</p>
+    <p>{{$tmsg['emailtest']}}</p>
 </body>
 </html>
