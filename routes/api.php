@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DownloadCsvController;
 use App\Http\Controllers\EdicionController;
 use App\Http\Controllers\JuradoController;
 use Illuminate\Support\Facades\Route;
@@ -11,4 +12,5 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/edicion',[EdicionController::class,'index']);
 Route::delete('/jurado/delete/{id}',[JuradoController::class,'destroy']);
 Route::get('/jurado',[JuradoController::class,'index']);
+Route::get('/descarga-csv',[DownloadCsvController::class,'download']);
 
