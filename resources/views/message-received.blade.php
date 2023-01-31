@@ -7,6 +7,6 @@
     <title>Mensaje enviado</title>
 </head>
 <body>
-    <p>{{$tmsg['emailtest']}}</p>
+    <p>{{$textomsg['textomsg']}}</p>
 </body>
 </html>

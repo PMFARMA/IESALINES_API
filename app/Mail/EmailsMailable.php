@@ -12,17 +12,17 @@ use Illuminate\Queue\SerializesModels;
 class EmailsMailable extends Mailable
 {
     use Queueable, SerializesModels;
-    public $tmsg;
-    public $amsg;
+    public $textomsg;
+    public $asuntomsg;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($tmsg,$amsg)
+    public function __construct($textomsg,$asuntomsg)
     {
-        $this->tmsg =$tmsg;
-        $this->amsg = $amsg;
+        $this->textomsg =$textomsg;
+        $this->asuntomsg = $asuntomsg;
 
     }
 
@@ -36,7 +36,7 @@ class EmailsMailable extends Mailable
         // return $this->subject($amsg);
         return new Envelope(
             // subject: 'Enhorabuena! Has sido seleccionado como Jurado de los Premios Aspid',
-            subject: $this->amsg,
+            subject: $this->asuntomsg,
         );
     }
 
