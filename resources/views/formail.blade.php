@@ -11,9 +11,9 @@
         @csrf {{--En laravel por motivos de seguridad es necesario verificar formularios con un token, al agregar este comando Laravel pone un campo oculto con el token permitiendo el acceso  --}}
         <p><strong>Enviar invitación a</strong></p>
         <p><strong>Asunto:</strong></p>
-        <textarea name="asuntotest">{{old('content')}}</textarea>
+        <textarea name="asuntotest">{{old('asuntotest')}}</textarea>
         <p><strong>Contenido:</strong></p>
-        <textarea name="emailtest">{{old('content')}}</textarea>
+        <textarea name="emailtest">{{old('emailtest')}}</textarea>
         <button>Enviar</button>
     </form>
 </body>
