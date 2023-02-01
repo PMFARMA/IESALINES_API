@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Edicion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class JuradoController extends Controller
@@ -14,7 +16,11 @@ class JuradoController extends Controller
      */
     public function index()
     {
-        //
+        $anio = Carbon::now()->year;
+        $id_edicion = Edicion::select('id')->where('anio', $anio-4)->get();
+        $item = User::select('id', 'Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado')->where('id_edicion', $id_edicion[0]->id)->get();
+        return  $item;
+
     }
 
     /**
