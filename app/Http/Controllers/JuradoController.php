@@ -7,6 +7,7 @@ use App\Models\Edicion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+
 class JuradoController extends Controller
 {
     /**
