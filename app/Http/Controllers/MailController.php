@@ -29,6 +29,6 @@ class MailController extends Controller
 
         Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg));
         // Mail::to('lauracatalanruiz11@gmail.com')->send(new EmailsMailable($textomsg,$asuntomsg));
-        return 'Mensaje enviado'; 
+        return response()->json(['message'=>'Mensaje enviado'],201); 
     }
 }
