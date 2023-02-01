@@ -73,7 +73,7 @@ class JuradoController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, id $id)
+    public function update(Request $request, $id)
     {
         $user = User::find($id);
         if ($user){
