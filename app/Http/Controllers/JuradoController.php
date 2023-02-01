@@ -80,6 +80,13 @@ class JuradoController extends Controller
      */
     public function destroy($id)
     {
-        User::where('id', $id)->delete();
+
+        $user = User::find($id);
+        if ($user){
+            User::where('id', $id)->delete();
+        }else{
+            return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
+        }
+        return response()->json(["message"=>"Usuario eliminado"], 201);
     }
 }
