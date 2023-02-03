@@ -78,7 +78,14 @@ class JuradoController extends Controller
     {
         $user = User::find($id);
         if ($user){
-            $user->update($request->all());
+            $user->nombre = $request->nombre;
+            $user->nom_imagen = $request->nom_imagen;
+            $user->email = $request->email;
+            $user->id_tipojurado = $request->id_tipojurado;
+            $user->cargo = $request->cargo;
+            $user->empresa = $request->empresa;
+            $user->texto = $request->texto;
+            $user->save();
             
         }else{
             return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
@@ -87,6 +94,35 @@ class JuradoController extends Controller
     }
     
 
+    public function getUserById(Request $request){
+
+        $user = User::select('nombre_imagen','nombre','cargo','empresa','texto')->where('id',$request->id)->get();
+        
+        if($user){
+            return response()->json($user,201);
+        }
+        else{
+            return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
+        }
+
+    }
+
+    public function confirmationUser(Request $request,$id){
+
+        $user = User::find($id);
+        if ($user){
+            $user->nombre = $request->nombre;
+            $user->nom_imagen = $request->nom_imagen;
+            $user->cargo = $request->cargo;
+            $user->empresa = $request->empresa;
+            $user->texto = $request->texto;
+            $user->save();
+        }else{
+            return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
+        }
+        return response()->json(["message"=>"Usuario actualizado"], 201);
+    
+    }
     /**
      * Remove the specified resource from storage.
      *
