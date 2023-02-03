@@ -116,11 +116,12 @@ class JuradoController extends Controller
             $user->cargo = $request->cargo;
             $user->empresa = $request->empresa;
             $user->texto = $request->texto;
+            $user->aceptación = Carbon::now()->format('Y-m-d').' '.Carbon::now()->format('H:i');
             $user->save();
         }else{
             return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
         }
-        return response()->json(["message"=>"Usuario actualizado"], 201);
+        return response()->json(["message"=>"aceptacion realizada"], 201);
     
     }
     /**
