@@ -15,4 +15,7 @@ Route::delete('/jurado/delete/{id}',[JuradoController::class,'destroy']);
 Route::get('/jurado',[JuradoController::class,'index']);
 Route::get('/descarga-csv',[DownloadCsvController::class,'download']);
 Route::post('/email', [MailController::class, 'storemail'])->name('storemail');
+Route::get('/aceptacion/{user}', function($user){
+    return $user;
+})->name('aceptacion')->middleware('signed');
 Route::put('/jurado/update/{id}',[JuradoController::class,'update']);

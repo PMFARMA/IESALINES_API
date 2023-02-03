@@ -9,6 +9,9 @@
 <body>
     <form action="{{route('storemail')}}" method="post">
         @csrf {{--En laravel por motivos de seguridad es necesario verificar formularios con un token, al agregar este comando Laravel pone un campo oculto con el token permitiendo el acceso  --}}
+        <p><strong>Tipo de correo</strong></p>
+        <textarea name="typemsg">invitacion</textarea>
+        <input type="hidden" name="id" value="7651">
         <p><strong>Enviar invitación a</strong></p>
         <textarea name="emailtomsg">bla@bla.bla</textarea>
         <p><strong>Asunto:</strong></p>

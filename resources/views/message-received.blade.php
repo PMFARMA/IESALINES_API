@@ -8,5 +8,6 @@
 </head>
 <body>
     <p>{{$textomsg['textomsg']}}</p>
+    <a href="{{$urlToFront}}">Link de Aceptacion</a>
 </body>
 </html>

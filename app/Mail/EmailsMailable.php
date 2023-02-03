@@ -14,15 +14,17 @@ class EmailsMailable extends Mailable
     use Queueable, SerializesModels;
     public $textomsg;
     public $asuntomsg;
+    public $urlToFront;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($textomsg,$asuntomsg)
+    public function __construct($textomsg,$asuntomsg,$urlToFront)
     {
         $this->textomsg =$textomsg;
         $this->asuntomsg = $asuntomsg;
+        $this->urlToFront =$urlToFront;
 
     }
 
