@@ -17,7 +17,7 @@ class JuradosExport implements FromCollection
     {
 
         $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-4)->get();
+        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
         $item = User::select('id', 'Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado','id_edicion')->where('id_edicion', $id_edicion[0]->id)->get();
         return $item;
     }
