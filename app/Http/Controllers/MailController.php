@@ -36,11 +36,11 @@ class MailController extends Controller
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
             case 'iniciacion':
-                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg));
+                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
             case 'recordatiorio':
-                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg));
+                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
         }
