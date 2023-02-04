@@ -24,9 +24,30 @@ class JuradoController extends Controller
     }
 
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
-    public function create()
+    public function create( Request $request)
     {
-        //
+
+        //**no se si el id de edicion los buscamos con el año actual o enviarselo directamente */
+        // $anio = Carbon::now()->year;
+        // $id_edicion = Edicion::select('id')->where('anio', $anio - 1)->get();
+        User::create([
+            "email"=>$request->email,
+            "id_tipojurado"=>$request->id_tipojurado,
+            "id_edicion"=>$request->id_edicion,
+            "nombre"=>$request->nombre,
+            "cargo"=>$request->cargo,
+            "empresa"=>$request->empresa
+        ]);
+
+        $user = User::select('id')
+        ->where('email',$request->email)
+        ->where('id_edicion',$request->id_edicion)->get();
+
+        if(count($user)>0){
+            return response()->json($user[0],201);
+        }else{
+            return response()->json(["message"=>"no se ha podido agregar al jurado"],201);
+        };
     }
 
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -65,7 +86,7 @@ class JuradoController extends Controller
         if (count($user) > 0) {
 
             $anio = Carbon::now()->year;
-            $id_edicion = Edicion::select('id')->where('anio', $anio - 1)->get();
+            $id_edicion = Edicion::select('id')->where('anio', $anio - 2)->get();
             
             /**evitamos error humano (repetir jurado misma edición) */
             if ($user[count($user) - 1]->id_edicion != $id_edicion[0]->id) { 
@@ -86,7 +107,7 @@ class JuradoController extends Controller
 
         $user = User::select('nombre_imagen', 'nombre', 'cargo', 'empresa', 'texto')->where('id', $request->id)->get();
 
-        if ($user) {
+        if (count($user)>0) {
             return response()->json($user, 201);
         } else {
             return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
