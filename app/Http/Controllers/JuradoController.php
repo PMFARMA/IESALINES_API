@@ -40,7 +40,7 @@ class JuradoController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        if (count($user) > 0) {
+        if ($user) {
             $user->nombre = $request->nombre;
             $user->nom_imagen = $request->nom_imagen;
             $user->email = $request->email;
