@@ -85,6 +85,7 @@ class JuradoController extends Controller
 
         if (count($user) > 0) {
 
+            /**no se si mejor enviar la edicion via request */
             $anio = Carbon::now()->year;
             $id_edicion = Edicion::select('id')->where('anio', $anio - 2)->get();
             
