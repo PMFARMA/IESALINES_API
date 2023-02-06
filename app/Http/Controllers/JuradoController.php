@@ -20,6 +20,12 @@ class JuradoController extends Controller
         $anio = Carbon::now()->year;
         $id_edicion = Edicion::select('id')->where('anio', $anio-4)->get();
         $item = User::select('id', 'Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado')->where('id_edicion', $id_edicion[0]->id)->get();
+
+        $users = User::join('tipojurado', 'as_jurado.id', '=', 'tipojurado.id')->get(['as_users.id', 'users.nombre', 'tipo_jurado.nombre']);
+
+
+
+
         return  $item;
 
     }
@@ -79,13 +85,13 @@ class JuradoController extends Controller
         $user = User::find($id);
         if ($user){
             $user->update($request->all());
-            
+
         }else{
             return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
         }
         return response()->json(["message"=>"Usuario actualizado"], 201);
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -105,3 +111,7 @@ class JuradoController extends Controller
         return response()->json(["message"=>"Usuario eliminado"], 201);
     }
 }
+
+
+
+
