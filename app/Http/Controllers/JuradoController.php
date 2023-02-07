@@ -131,7 +131,7 @@ class JuradoController extends Controller
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
 
     /**Actualización de los datos enviados a traves de la aceptación */
-    public function confirmationUser(Request $request, $id)
+    public function userConfirmation(Request $request, $id)
     {
 
         $user = User::find($id);
