@@ -22,4 +22,8 @@ Route::put('jurado/aceptacion/{user}',[JuradoController::class,'userConfirmation
 Route::put('/jurado/update/{id}',[JuradoController::class,'update']);
 Route::post('/jurado/add-get',[JuradoController::class,'getUserByEmail']);
 Route::post('/jurado/add',[JuradoController::class,'create']);
+Route::get('/jurado/tipo', [TipoJuradoController::class, 'index']);
+
+
+
 
