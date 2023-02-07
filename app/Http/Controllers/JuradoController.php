@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Edicion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 
 
 class JuradoController extends Controller
@@ -67,12 +68,7 @@ class JuradoController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        // if ($user){
-        //     $user->update($request->all());
-
-        // }else{
-        //     return response()->json(["message"=>"Usuario no encontrado en la base de datos"], 404);
-        // }
+     
         if ($user) {
             $user->nombre = $request->nombre;
             $user->nom_imagen = $request->nom_imagen;
@@ -131,17 +127,22 @@ class JuradoController extends Controller
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
 
     /**Actualización de los datos enviados a traves de la aceptación */
-    public function userConfirmation(Request $request, $id)
+    public function userConfirmation(Request $request, $user)
     {
+        
+        $decrypt = Crypt::decryptString($user);
 
+        $id = (int) $decrypt;
+        // return response()->json($id);
         $user = User::find($id);
+        // return $user;
         if ($user) {
             $user->nombre = $request->nombre;
             $user->nom_imagen = $request->nom_imagen;
             $user->cargo = $request->cargo;
             $user->empresa = $request->empresa;
             $user->texto = $request->texto;
-            $user->aceptación = Carbon::now()->format('Y-m-d') . ' ' . Carbon::now()->format('H:i');
+            $user->aceptacion = Carbon::now()->format('Y-m-d') . ' ' . Carbon::now()->format('H:i');
             $user->save();
         } else {
             return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
