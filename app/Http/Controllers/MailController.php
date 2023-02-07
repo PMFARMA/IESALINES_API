@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailsMailable;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Crypt;
+
 class MailController extends Controller
 
 {
     public function storemail(Request $request){
         // $tmsg = $request->all();
         // return $tmsg;
+        
+        return ["User"=> Crypt::encryptString($request->id)];
+
         $textomsg = $request->validate([
             "textomsg" => 'required',
         ]);
@@ -27,7 +32,7 @@ class MailController extends Controller
         switch ($typemsg) {
             case 'invitacion':
                 // return'hola';
-                // return $request->id;
+                
                 $url= URL::signedRoute('aceptacion', ['user'=>$request->id]);
                 $separateUrl=explode('/',$url);
                 $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
