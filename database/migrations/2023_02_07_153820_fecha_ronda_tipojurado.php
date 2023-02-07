@@ -31,7 +31,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('as_', function (Blueprint $table) {
+        Schema::table('as_jurado', function (Blueprint $table) {
             $table->dropColumn('ini_Ronda_1');
             $table->dropColumn('limit_Ronda_1');
             $table->dropColumn('ini_Ronda_2');
