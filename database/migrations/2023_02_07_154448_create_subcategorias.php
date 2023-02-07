@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('categoria');
-            $table->int('id_edicion');
+            $table->integer('id_edicion');
             $table->timestamps();
         });
     }
