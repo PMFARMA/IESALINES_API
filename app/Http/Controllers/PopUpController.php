@@ -24,16 +24,7 @@ class PopUpController extends Controller
      */
     public function create(Request $request)
     {
-        PopUp::create([
-            "tipo"=>$request->tipo,
-            "titulo"=>$request->titulo,
-            "subtitulo"=>$request->subtitulo,
-            "mensaje"=>$request->mensaje,
-            "fecha_reunion"=>$request->fecha_reunion,
-            "ruta_video"=>$request->ruta_video,
-            "id_tipo_jurado"=>$request->id_tipo_jurado,
-            "id_edicion"=>$request->id_edicion
-        ]);
+       
     }
 
     /**
@@ -76,9 +67,24 @@ class PopUpController extends Controller
      * @param  \App\Models\PopUp  $popUp
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PopUp $popUp)
+    public function upsert(Request $request)
     {
-        //
+
+        // return gettype($request->id_tipojurado);
+        PopUp::updateOrCreate(
+            ["tipo"=>$request->tipo,
+            "id_tipo_jurado"=>$request->id_tipojurado,
+            "id_edicion"=>$request->id_edicion],
+            [
+            "tipo"=>$request->tipo,
+            "titulo"=>$request->titulo,
+            "subtitulo"=>$request->subtitulo,
+            "mensaje"=>$request->mensaje,
+            "fecha_reunion"=>$request->fecha_reunion,
+            "ruta_video"=>$request->ruta_video,
+            "id_tipo_jurado"=>$request->id_tipojurado,
+            "id_edicion"=>$request->id_edicion
+        ])->where('tipo',$request->tipo);
     }
 
     /**

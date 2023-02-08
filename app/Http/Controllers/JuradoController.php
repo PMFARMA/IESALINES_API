@@ -20,6 +20,11 @@ class JuradoController extends Controller
     {
         $anio = Carbon::now()->year;
         $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+
+        if(count($id_edicion)==0){
+            return response()->json(["message"=>'no hay edición creada para este año'],404);
+        }
+
         $item = User::select('as_jurado.id','as_tipojurado.nombre AS tipo_jurado', 'as_jurado.Nombre', 'Empresa','Email','nom_imagen','aceptacion')->join('as_tipojurado', 'as_jurado.id_tipojurado', '=', 'as_tipojurado.id')->where('as_jurado.id_edicion', $id_edicion[0]->id)->get();
 
         // $users = User::join('as_tipojurado', 'as_jurado.id', '=', 'as_tipojurado.id')->get(['as_jurado.id', 'as_jurado.nombre', 'as_tipojurado.nombre']);

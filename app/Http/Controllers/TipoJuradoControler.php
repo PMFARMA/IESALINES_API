@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Edicion;
 use Carbon\Carbon;
 
-class TipoJuradoControler extends Controller
+class TipoJuradoController extends Controller
 {
     /**
      * Display a listing of the resource.
