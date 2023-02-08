@@ -6,6 +6,7 @@ use App\Http\Controllers\JuradoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\TipoJuradoControler;
 
 use Carbon\Carbon;
 
@@ -22,7 +23,7 @@ Route::put('jurado/aceptacion/{user}',[JuradoController::class,'userConfirmation
 Route::put('/jurado/update/{id}',[JuradoController::class,'update']);
 Route::post('/jurado/add-get',[JuradoController::class,'getUserByEmail']);
 Route::post('/jurado/add',[JuradoController::class,'create']);
-Route::get('/jurado/tipo', [TipoJuradoController::class, 'index']);
+Route::get('/jurado/tipo', [TipoJuradoControler::class, 'index']);
 
 
 

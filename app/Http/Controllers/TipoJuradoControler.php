@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\TipoJurado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Edicion;
+use Carbon\Carbon;
 
 class TipoJuradoControler extends Controller
 {
@@ -15,7 +17,11 @@ class TipoJuradoControler extends Controller
      */
     public function index()
     {
-        //
+        $anio = Carbon::now()->year;
+        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
+        
+        $data = TipoJurado::select("*")->where("id_edicion", $id_edicion[0]->id)->get();
+        return $data;
     }
 
     /**
