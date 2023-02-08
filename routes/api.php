@@ -13,18 +13,22 @@ use Carbon\Carbon;
 //Auth
 Route::post('/login', [LoginController::class, 'login'])->middleware('web');
 Route::post('/logout', [LoginController::class, 'logout']);
-Route::get('/edicion',[EdicionController::class,'index']);
-Route::get('/jurado',[JuradoController::class,'index']);
-Route::get('/descarga-csv',[DownloadCsvController::class,'download']);
 Route::post('/email', [MailController::class, 'storemail'])->name('storemail');
+Route::get('/edicion',[EdicionController::class,'index']);
+
+
+Route::get('/jurado',[JuradoController::class,'index']);
+Route::get('/jurado/descarga-csv',[DownloadCsvController::class,'download']);
 Route::post('/jurado/aceptacion/{id}',[JuradoController::class,'getUserbyId']);
 Route::delete('/jurado/delete/{id}',[JuradoController::class,'destroy']);
 Route::put('jurado/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
 Route::put('/jurado/update/{id}',[JuradoController::class,'update']);
 Route::post('/jurado/add-get',[JuradoController::class,'getUserByEmail']);
 Route::post('/jurado/add',[JuradoController::class,'create']);
+
 Route::get('/jurado/tipo', [TipoJuradoControler::class, 'index']);
 
 
+Route::put('/config/popup',[PopUpController::class,'create']);
 
 
