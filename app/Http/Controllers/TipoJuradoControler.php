@@ -21,6 +21,10 @@ class TipoJuradoControler extends Controller
         $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
         
         $data = TipoJurado::select("*")->where("id_edicion", $id_edicion[0]->id)->get();
+
+        foreach($data as $object){
+            $object->categoria = explode(",",$object->categoria);
+        }
         return $data;
     }
 
