@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TipoJurado;
-use App\Http\Controllers\Controller;
+use App\Models\PopUp;
 use Illuminate\Http\Request;
-use App\Models\Edicion;
-use Carbon\Carbon;
 
-class TipoJuradoController extends Controller
+class PopUpController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,15 +14,7 @@ class TipoJuradoController extends Controller
      */
     public function index()
     {
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
-        
-        $data = TipoJurado::select("*")->where("id_edicion", $id_edicion[0]->id)->get();
-
-        foreach($data as $object){
-            $object->categoria = explode(",",$object->categoria);
-        }
-        return $data;
+        //
     }
 
     /**
@@ -33,9 +22,9 @@ class TipoJuradoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -52,10 +41,10 @@ class TipoJuradoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TipoJurado  $tipoJurado
+     * @param  \App\Models\PopUp  $popUp
      * @return \Illuminate\Http\Response
      */
-    public function show(TipoJurado $tipoJurado)
+    public function show(PopUp $popUp)
     {
         //
     }
@@ -63,10 +52,10 @@ class TipoJuradoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TipoJurado  $tipoJurado
+     * @param  \App\Models\PopUp  $popUp
      * @return \Illuminate\Http\Response
      */
-    public function edit(TipoJurado $tipoJurado)
+    public function edit(PopUp $popUp)
     {
         //
     }
@@ -75,21 +64,36 @@ class TipoJuradoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TipoJurado  $tipoJurado
+     * @param  \App\Models\PopUp  $popUp
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoJurado $tipoJurado)
+    public function upsert(Request $request)
     {
-        //
+
+        // return gettype($request->id_tipojurado);
+        PopUp::updateOrCreate(
+            ["tipo"=>$request->tipo,
+            "id_tipo_jurado"=>$request->id_tipojurado,
+            "id_edicion"=>$request->id_edicion],
+            [
+            "tipo"=>$request->tipo,
+            "titulo"=>$request->titulo,
+            "subtitulo"=>$request->subtitulo,
+            "mensaje"=>$request->mensaje,
+            "fecha_reunion"=>$request->fecha_reunion,
+            "ruta_video"=>$request->ruta_video,
+            "id_tipo_jurado"=>$request->id_tipojurado,
+            "id_edicion"=>$request->id_edicion
+        ])->where('tipo',$request->tipo);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TipoJurado  $tipoJurado
+     * @param  \App\Models\PopUp  $popUp
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoJurado $tipoJurado)
+    public function destroy(PopUp $popUp)
     {
         //
     }
