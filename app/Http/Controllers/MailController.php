@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailsMailable;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Crypt;
+
 class MailController extends Controller
 
 {
     public function storemail(Request $request){
-        // $tmsg = $request->all();
-        // return $tmsg;
+  
         $textomsg = $request->validate([
             "textomsg" => 'required',
         ]);
@@ -25,13 +26,14 @@ class MailController extends Controller
         ]);
         $typemsg = $request->get('typemsg');
         switch ($typemsg) {
+            
             case 'invitacion':
-                // return'hola';
-                // return $request->id;
-                $url= URL::signedRoute('aceptacion', ['user'=>$request->id]);
+                $encrypted = Crypt::encryptString($request->id);
+                $url= URL::signedRoute('aceptacion', ['user'=>$encrypted]);
                 $separateUrl=explode('/',$url);
+                
                 $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
-                // $urlToFront='hola';
+            
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
@@ -52,4 +54,6 @@ class MailController extends Controller
         // Mail::to('lauracatalanruiz11@gmail.com')->send(new EmailsMailable($textomsg,$asuntomsg));
         // return response()->json(['message'=>'Mensaje enviado'],201); 
     }
+
+   
 }
