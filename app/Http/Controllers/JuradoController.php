@@ -19,8 +19,8 @@ class JuradoController extends Controller
     public function index()
     {
         $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-4)->get();
-        $item = User::select('as_jurado.id','as_tipojurado.nombre', 'as_jurado.Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado')->join('as_tipojurado', 'as_jurado.id_tipojurado', '=', 'as_tipojurado.id')->where('as_jurado.id_edicion', $id_edicion[0]->id)->get();
+        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $item = User::select('as_jurado.id','as_tipojurado.nombre', 'as_jurado.Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado','aceptacion')->join('as_tipojurado', 'as_jurado.id_tipojurado', '=', 'as_tipojurado.id')->where('as_jurado.id_edicion', $id_edicion[0]->id)->get();
 
         // $users = User::join('as_tipojurado', 'as_jurado.id', '=', 'as_tipojurado.id')->get(['as_jurado.id', 'as_jurado.nombre', 'as_tipojurado.nombre']);
 

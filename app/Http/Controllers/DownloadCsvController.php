@@ -16,6 +16,7 @@ class DownloadCsvController extends Controller
      */
     public function download()
     {
+        // return view('exportJurados');
         
         return Excel::download(new JuradosExport,'prueba.xlsx');
     }
