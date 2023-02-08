@@ -18,7 +18,7 @@ class EdicionController extends Controller
     {
 
     $year = Carbon::now()->year;
-       $data = Edicion::where('anio',$year-1)->get();
+       $data = Edicion::where('anio',$year)->get();
        return $data;
     }
 }
