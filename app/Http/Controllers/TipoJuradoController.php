@@ -87,11 +87,15 @@ class TipoJuradoController extends Controller
         //
     }
 
-    public function updateSubCategorias()
+    public function updateSubCategorias(Request $request)
     {
-        $request=['subcategoria'=>'A.1','subcategoria'=>'A.2','subcategoria'=>'A.3',];
-        $result=implode(',',$request);
-        return $result;
+        $tipojurado = TipoJurado::find($request->id);
+
+        if($tipojurado){
+            $tipojurado->categoria = implode(",",$request->subcategoria);
+            $tipojurado->save();
+        }
+        return request()->json(["message"=>"subcategorías agregadas"],201);
 
     }
 

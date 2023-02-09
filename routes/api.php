@@ -28,7 +28,7 @@ Route::post('/jurado/email',[JuradoController::class,'getUserByEmail']);
 
 Route::put('jurado/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
 Route::get('/jurado/tipo', [TipoJuradoController::class, 'index']);
-Route::put('/config/subcategorias/{id}', [TipoJuradoController::class, 'updateSubCategorias']);
+Route::put('/config/subcategorias', [TipoJuradoController::class, 'updateSubCategorias']);
 
 
 Route::get('/jurado/descarga-csv',[CSVController::class,'download']);
