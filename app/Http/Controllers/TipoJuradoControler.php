@@ -73,6 +73,14 @@ class TipoJuradoControler extends Controller
         //
     }
 
+    public function updateSubCategorias()
+    {
+        $request=['subcategoria'=>'A.1','subcategoria'=>'A.2','subcategoria'=>'A.3',];
+        $result=implode(',',$request);
+        return $result;
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *
