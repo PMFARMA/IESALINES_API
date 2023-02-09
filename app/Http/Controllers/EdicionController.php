@@ -17,8 +17,12 @@ class EdicionController extends Controller
     public function index()
     {
 
-    $year = Carbon::now()->year;
-       $data = Edicion::where('anio',$year-1)->get();
-       return $data;
+       $year = Carbon::now()->year;
+       $edicion = Edicion::where('anio',$year)->get();
+
+       if(count($edicion)==0){
+        return response()->json(["message"=>'no hay edición creada para este año'],404);
+    }
+       return $edicion;
     }
 }

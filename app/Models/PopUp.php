@@ -9,18 +9,19 @@ class PopUp extends Model
 {
     use HasFactory;
 
-    protected $table = 'AS_tipojurado';
+    protected $table = 'AS_popup';
 
 
     protected $fillable = [
 
         'id',
+        'tipo',
         'titulo',
         'subtitulo',
         'mensaje',
         'fecha_reunion',
         'ruta_video',
-        'tipo_jurado',
+        'id_tipo_jurado',
         'id_edicion'
 
     ];

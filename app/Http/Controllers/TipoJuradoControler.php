@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TipoJurado;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Edicion;
+use Carbon\Carbon;
 
-class TipoJuradoControler extends Controller
+class TipoJuradoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,19 @@ class TipoJuradoControler extends Controller
      */
     public function index()
     {
-        //
+        $anio = Carbon::now()->year;
+        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        
+        if(count($id_edicion)==0){
+            return response()->json(["message"=>'no hay edición creada para este año'],404);
+        }
+
+        $data = TipoJurado::select("*")->where("id_edicion", $id_edicion[0]->id)->get();
+
+        foreach($data as $object){
+            $object->categoria = explode(",",$object->categoria);
+        }
+        return $data;
     }
 
     /**

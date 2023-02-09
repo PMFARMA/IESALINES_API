@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Exports\JuradosExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-class DownloadCsvController extends Controller
+class CSVController extends Controller
 {
     /**
      * Display a listing of the resource.
