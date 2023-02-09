@@ -29,9 +29,6 @@ class JuradoController extends Controller
 
         // $users = User::join('as_tipojurado', 'as_jurado.id', '=', 'as_tipojurado.id')->get(['as_jurado.id', 'as_jurado.nombre', 'as_tipojurado.nombre']);
 
-
-
-
         return  $item;
     }
 
@@ -39,9 +36,6 @@ class JuradoController extends Controller
     public function create( Request $request)
     {
 
-        //**no se si el id de edicion los buscamos con el año actual o enviarselo directamente */
-        // $anio = Carbon::now()->year;
-        // $id_edicion = Edicion::select('id')->where('anio', $anio - 1)->get();
         User::create([
             "email"=>$request->email,
             "id_tipojurado"=>$request->id_tipojurado,
@@ -58,7 +52,7 @@ class JuradoController extends Controller
         if(count($user)>0){
             return response()->json($user[0],201);
         }else{
-            return response()->json(["message"=>"no se ha podido agregar al jurado"],201);
+            return response()->json(["message"=>"no se ha podido agregar al jurado"],404);
         };
     }
 
@@ -99,9 +93,13 @@ class JuradoController extends Controller
 
         if (count($user) > 0) {
 
-            /**no se si mejor enviar la edicion via request */
+            /**recogemos el id de la edicion de actual*/
             $anio = Carbon::now()->year;
-            $id_edicion = Edicion::select('id')->where('anio', $anio - 2)->get();
+            $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+
+            if(count($id_edicion)==0){
+                return response()->json(["message"=>'no hay edición creada para este año'],404);
+            }
 
             /**evitamos error humano (repetir jurado misma edición) */
             if ($user[count($user) - 1]->id_edicion != $id_edicion[0]->id) {
@@ -110,17 +108,17 @@ class JuradoController extends Controller
                 return response()->json(["message" => 'el usuario ya ha sido inscrito en esta edición'], 401);
             }
         } else {
-            return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
+            return response()->json(["message" => "Usuario no encontrado en la base de datos"], 200);
         }
     }
 
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-    /**Busca usuario pos id */
+    /**Busca usuario por id */
     public function getUserById(Request $request)
     {
 
-        $user = User::select('nombre_imagen', 'nombre', 'cargo', 'empresa', 'texto')->where('id', $request->id)->get();
+        $user = User::select('nombre_imagen', 'nombre', 'cargo', 'empresa', 'biografia')->where('id', $request->id)->get();
 
         if (count($user)>0) {
             return response()->json($user, 201);
