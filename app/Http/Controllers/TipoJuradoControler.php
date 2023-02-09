@@ -19,7 +19,7 @@ class TipoJuradoController extends Controller
     {
         $anio = Carbon::now()->year;
         $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
-        
+
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
@@ -86,6 +86,30 @@ class TipoJuradoController extends Controller
     {
         //
     }
+    public function updateLimitDate(Request $request, $ronda)
+    {
+        $tipoJurado = TipoJurado::find($request->id);
+
+        if ($tipoJurado) {
+            $tipoJurado->limit_Ronda_1 = $request->nombre;
+            $tipoJurado->save();
+        } else {
+            return response()->json(["message" => "Tipo de jurado no encontrado en la base de datos"], 404);
+        }
+
+    }
+    // public function updateInitDate(Request $request, $ronda)
+    // {
+    //     $tipoJurado = TipoJurado::find($request->id);
+
+    //     if ($tipoJurado) {
+    //         $tipoJurado->limit_Ronda_1 = $request->nombre;
+    //         $tipoJurado->save();
+    //     } else {
+    //         return response()->json(["message" => "Tipo de jurado no encontrado en la base de datos"], 404);
+    //     }
+
+    // }
 
     /**
      * Remove the specified resource from storage.
