@@ -37,3 +37,4 @@ Route::put('/config/popup',[PopUpController::class,'upsert']);
 Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDate']);
 
 
+// Route::post('/pruebas',[JuradoController::class,'pruebas']);

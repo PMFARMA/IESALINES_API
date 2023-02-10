@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Edicion;
+use App\Models\EdicionObras;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
@@ -35,6 +36,18 @@ class JuradoController extends Controller
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
     public function create( Request $request)
     {
+        $anio = Carbon::now()->year;
+
+        $obrasIncompatibles = [];
+        $obras = EdicionObras::selectRaw('id,YEAR(fecha_edicion)')->where('empresa_original',$request->empresa)->get();
+
+        foreach($obras as $obra){
+            
+            if($obra['YEAR(fecha_edicion)']==$anio-1){
+                array_push($obrasIncompatibles,$obra->id);
+            }
+            
+        }
 
         User::create([
             "email"=>$request->email,
@@ -42,7 +55,8 @@ class JuradoController extends Controller
             "id_edicion"=>$request->id_edicion,
             "nombre"=>$request->nombre,
             "cargo"=>$request->cargo,
-            "empresa"=>$request->empresa
+            "empresa"=>$request->empresa,
+            "obra_incompatible"=>implode(',',$obrasIncompatibles)
         ]);
 
         $user = User::select('id')
@@ -117,10 +131,16 @@ class JuradoController extends Controller
     /**Busca usuario por id */
     public function getUserById(Request $request)
     {
+        $decrypt = Crypt::decryptString($request->id);
 
-        $user = User::select('nombre_imagen', 'nombre', 'cargo', 'empresa', 'biografia')->where('id', $request->id)->get();
+        $id = (int) $decrypt;
+
+        $user = User::select('nom_imagen', 'nombre', 'cargo', 'empresa','biografia','obra_incompatible')->where('id',$id )->get();
 
         if (count($user)>0) {
+
+            $user[0]->obra_incompatible = explode(',',$user[0]->obra_incompatible);
+
             return response()->json($user, 201);
         } else {
             return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
@@ -170,6 +190,7 @@ class JuradoController extends Controller
         }
         return response()->json(["message" => "Usuario eliminado"], 201);
     }
+
 }
 
 
