@@ -31,6 +31,6 @@ Route::get('/jurado/tipo', [TipoJuradoController::class, 'index']);
 Route::get('/jurado/descarga-csv',[CSVController::class,'download']);
 
 Route::put('/config/popup',[PopUpController::class,'upsert']);
-Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDate']);
+Route::put('/config/limit-otacion',[TipoJuradoController::class,'updateLimitDate']);
 
 
