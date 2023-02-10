@@ -91,7 +91,7 @@ class TipoJuradoController extends Controller
         $tipoJurado = TipoJurado::find($request->id);
 
         if ($tipoJurado) {
-            $tipoJurado->limit_Ronda_1 = $request->nombre;
+            $tipoJurado->limit_Ronda_1 = $request->limit_date;
             $tipoJurado->save();
         } else {
             return response()->json(["message" => "Tipo de jurado no encontrado en la base de datos"], 404);
