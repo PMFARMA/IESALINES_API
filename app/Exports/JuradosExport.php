@@ -19,7 +19,7 @@ class JuradosExport implements FromView
     {
 
         $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $id_edicion = Edicion::select('id')->where('anio', $anio -1)->get();
 
         
         if(count($id_edicion)==0){
@@ -29,7 +29,7 @@ class JuradosExport implements FromView
             ]);
         }
 
-        $item = User::select('as_jurado.id','as_tipojurado.nombre', 'as_jurado.Nombre', 'Empresa', 'Tipo_jurado','Email','nom_imagen','id_tipojurado','aceptacion')->join('as_tipojurado', 'as_jurado.id_tipojurado', '=', 'as_tipojurado.id')->where('as_jurado.id_edicion', $id_edicion[0]->id)->get();
+        $item = User::select('as_tipojurado.nombre AS Tipo_jurado', 'as_jurado.Nombre', 'Empresa', 'Email','aceptacion')->join('as_tipojurado', 'as_jurado.id_tipojurado', '=', 'as_tipojurado.id')->where('as_jurado.id_edicion', $id_edicion[0]->id)->get();
 
         
             return view('exportJurados',[
