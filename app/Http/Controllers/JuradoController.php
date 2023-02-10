@@ -75,7 +75,7 @@ class JuradoController extends Controller
             $user->id_tipojurado = $request->id_tipojurado;
             $user->cargo = $request->cargo;
             $user->empresa = $request->empresa;
-            $user->texto = $request->texto;
+            $user->biografia = $request->biografia;
             $user->save();
         } else {
             return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
