@@ -29,8 +29,42 @@ class CategoriasController extends Controller
     }
 
 
-    public function relateSubCat(){
+        
+    public function relateSubCatTipoJurado(Request $request){
+
+        $data = AuxTipoJuradoSubCat::select('id_subcategoria')->where('id_edicion',$request->id_edicion)->where('id_tipojurado',$request->id_tipojurado)->get();
 
 
+        $repeat = [];
+        foreach($data as $dat){
+
+            if(!in_array($dat->id_subcategoria,$request->id_subcategoria)){
+                
+                AuxTipoJuradoSubCat::where('id_subcategoria',$dat->id_subcategoria)
+                ->where('id_edicion',$request->id_edicion)
+                ->where('id_tipojurado',$request->id_tipojurado)
+                ->delete();
+            }else{
+                array_push($repeat,$dat->id_subcategoria); 
+            }
+        }
+
+        if(count($repeat)!=count($request->id_subcategoria)){
+            foreach($request->id_subcategoria as $data){
+                if(!in_array($data,$repeat)){
+                    AuxTipoJuradoSubCat::create([
+                        'id_subcategoria'=>$data,
+                        'id_tipojurado'=>$request->id_tipojurado,
+                        'id_edicion'=>$request->id_edicion
+                    ]);
+                }
+            }
+   
+        }
+        
+        
     }
+
+
+    
 }

@@ -9,4 +9,12 @@ class AuxTipoJuradoSubCat extends Model
 {
     use HasFactory;
     protected $table = 'as_aux_tipojurado_subcategoria';
+
+    protected $fillable = [
+        'id',
+        'id_tipojurado',
+        'id_subcategoria',
+        'id_edicion'
+
+    ];
 }
