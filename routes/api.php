@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\CSVController;
 use App\Http\Controllers\EdicionController;
 use App\Http\Controllers\JuradoController;
@@ -36,5 +37,7 @@ Route::get('/jurado/descarga-csv',[CSVController::class,'download']);
 Route::put('/config/popup',[PopUpController::class,'upsert']);
 Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDate']);
 
+
+Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
 
 // Route::post('/pruebas',[JuradoController::class,'pruebas']);
