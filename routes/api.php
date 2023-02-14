@@ -41,3 +41,5 @@ Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDat
 Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
 
 // Route::post('/pruebas',[JuradoController::class,'pruebas']);
+
+Route::put('/ronda/switch', [RondasController::class, 'activacionRonda']);
