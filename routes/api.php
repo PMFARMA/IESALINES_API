@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\TipoJuradoController;
 use App\Http\Controllers\PopUpController;
+use App\Http\Controllers\RondasController;
 
 
 
@@ -39,5 +40,8 @@ Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDat
 
 
 Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
+
+Route::get('/ronda/subcat-porcentaje',[RondasController::class,'subCategoriaPorcentaje']);
+
 
 // Route::post('/pruebas',[JuradoController::class,'pruebas']);
