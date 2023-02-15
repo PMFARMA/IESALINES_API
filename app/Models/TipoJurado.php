@@ -17,7 +17,7 @@ class TipoJurado extends Model
         "limit_ronda1",
         "ini_ronda2",
         "limit_ronda2",
-        "subcategoria",
-        "id_edicion"
+        "id_edicion", 
+        "aceptacion_ronda"
     ];
 }

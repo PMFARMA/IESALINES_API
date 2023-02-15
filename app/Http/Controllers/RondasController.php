@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\AuxTipoJuradoSubCat;
+use App\Models\TipoJurado;
 use App\Models\Subcategorias;
 use App\Models\Edicion;
 use App\Models\Votaciones;
@@ -49,6 +50,14 @@ class RondasController extends Controller
         };
 
         return $arrayFinal;
+    }
+
+    public function activacionRonda(Request $request){
+       
+        $idEdicion = TipoJurado::where('id_edicion',$request->id_edicion)->update(['aceptacion_ronda'=>$request->aceptacion_ronda]);
+        return $idEdicion;
+
+        
     }
 }
 
