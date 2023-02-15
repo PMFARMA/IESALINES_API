@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::table('as_tipojurado', function (Blueprint $table) {
             $table->dropColumn('categoria');
             $table->boolean('aceptacion_ronda')->nullable()->default(false);
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
@@ -27,6 +29,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('as_tipojurado', function (Blueprint $table) {
+            $table->dropColumn('aceptacion_ronda');
+            $table->dropColumn('created_at');
+            $table->dropColumn('updated_at');
         });
     }
 };
