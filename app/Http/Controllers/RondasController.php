@@ -15,7 +15,7 @@ class RondasController extends Controller
         $creatividad_count=0;
         $formacion_count=0;
         $salud_count=0;
-        $jurados = User::select('as_jurado.*', 'as_tipojurado.nombre AS categoria','as_edicion_obras_voto_jurado.id AS votos')->where('as_jurado.id_edicion','=','28')->join('as_tipojurado','as_jurado.id_tipojurado','=','as_tipojurado.id')->join('as_edicion_obras_voto_jurado', 'as_edicion_obras_voto_jurado.id_jurado','=','as_jurado.id')->get();
+        $jurados = User::select('as_jurado.*', 'as_tipojurado.nombre AS categoria')->where('as_jurado.id_edicion','=','28')->join('as_tipojurado','as_jurado.id_tipojurado','=','as_tipojurado.id')->get();
 
         $total_sub_categorias = AuxTipoJuradoSubCat::select('*')->get();
         foreach ($total_sub_categorias as $index_subcategoria) {
@@ -37,9 +37,7 @@ class RondasController extends Controller
         }
 
         foreach ($jurados as $jurado) {
-            foreach ($jurados as $ides) {
-
-            }
+            $total_votacion = "";
         }
         // dd($creatividad_count);
         dd($jurados);
