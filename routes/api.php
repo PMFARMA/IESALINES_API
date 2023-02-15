@@ -10,10 +10,6 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\TipoJuradoController;
 use App\Http\Controllers\PopUpController;
 use App\Http\Controllers\RondasController;
-<<<<<<< HEAD
-
-=======
->>>>>>> 49-actualizar-la-activacion-de-la-ronda
 
 
 //Auth
