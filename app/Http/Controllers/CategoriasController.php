@@ -15,7 +15,7 @@ class CategoriasController extends Controller
     public function getSubCategorias(){
 
         $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
 
       
         if(count($id_edicion)==0){
@@ -62,6 +62,7 @@ class CategoriasController extends Controller
    
         }
         
+        return AuxTipoJuradoSubCat::find('*');
         
     }
 

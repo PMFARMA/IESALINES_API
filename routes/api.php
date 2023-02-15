@@ -13,8 +13,6 @@ use App\Http\Controllers\RondasController;
 
 
 
-
-
 //Auth
 Route::post('/login', [LoginController::class, 'login'])->middleware('web');
 Route::post('/logout', [LoginController::class, 'logout']);
@@ -43,5 +41,9 @@ Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDat
 Route::get('/ronda/jurado-porcentaje',[RondasController::class,'juradoPorcentaje']);
 
 Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
+
+// Route::post('/pruebas',[JuradoController::class,'pruebas']);
+Route::get('/ronda/subcat-porcentaje',[RondasController::class,'subCategoriaPorcentaje']);
+
 
 // Route::post('/pruebas',[JuradoController::class,'pruebas']);
