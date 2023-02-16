@@ -20,7 +20,6 @@ class RondasController extends Controller
 
         $total_sub_categorias = AuxTipoJuradoSubCat::select('*')->get();
         foreach ($total_sub_categorias as $index_subcategoria) {
-            // dd($index_subcategoria->id_tipojurado);
             switch ($index_subcategoria->id_tipojurado) {
                 case 1:
                     $creatividad_count = $creatividad_count +1;
@@ -38,10 +37,10 @@ class RondasController extends Controller
         }
 
         foreach ($jurados as $jurado) {
-            $total_votacion = "";
+            // dd($jurado);
+            $total_votacion = Votaciones::select('*')->where('id_jurado','=',$jurado->id)->get();
+            dd($total_votacion);
         }
-        // dd($creatividad_count);
-        dd($jurados);
 
     }
 
@@ -53,7 +52,7 @@ class RondasController extends Controller
         $anio = Carbon::now()->year;
         $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
 
-      
+
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
@@ -75,7 +74,7 @@ class RondasController extends Controller
                 $info = Subcategorias::select('*')->where('id',$key)->get();
                 array_push($arrayFinal,["calculo"=>$result[0]["count(*)"]/$value*100,"area"=>$info[0]->id_area,"codigo"=>$info[0]->codigo,"descripcion"=>$info[0]->descrip]);
             }
-            
+
         };
 
         return $arrayFinal;
