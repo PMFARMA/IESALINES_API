@@ -72,7 +72,8 @@ class RondasController extends Controller
                     break;
             }
         }
-        return $array_final;
+        $total = 0;
+        return response()->json([$array_final, $total]);
 
     }
 
