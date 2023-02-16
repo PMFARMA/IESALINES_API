@@ -37,9 +37,11 @@ Route::get('/jurado/descarga-csv',[CSVController::class,'download']);
 Route::put('/config/popup',[PopUpController::class,'upsert']);
 Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDate']);
 
+Route::get('/ronda/jurado-porcentaje',[RondasController::class,'juradoPorcentaje']);
 
 Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
 
+// Route::post('/pruebas',[JuradoController::class,'pruebas']);
 Route::get('/ronda/subcat-porcentaje',[RondasController::class,'subCategoriaPorcentaje']);
 
 
