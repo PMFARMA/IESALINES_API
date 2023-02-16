@@ -41,11 +41,11 @@ Route::get('/ronda/jurado-porcentaje',[RondasController::class,'juradoPorcentaje
 
 Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
 
-// Route::post('/pruebas',[JuradoController::class,'pruebas']);
+
 Route::get('/ronda/subcat-porcentaje',[RondasController::class,'subCategoriaPorcentaje']);
 
 
-// Route::post('/pruebas',[JuradoController::class,'pruebas']);
+
 
 
 Route::put('/ronda/switch', [RondasController::class, 'activacionRonda']);
