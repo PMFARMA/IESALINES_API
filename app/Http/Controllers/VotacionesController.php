@@ -78,8 +78,8 @@ class VotacionesController extends Controller
      * @param  \App\Models\Votaciones  $votaciones
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Votaciones $votaciones)
+    public function destroySubcatVotaciones(Request $request)
     {
-        //
+        Votaciones::where('id_cod_particip', $request->id_cod_particip)->delete()
     }
 }
