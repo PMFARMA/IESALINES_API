@@ -80,6 +80,7 @@ class VotacionesController extends Controller
      */
     public function destroySubcatVotaciones(Request $request)
     {
-        Votaciones::where('id_cod_particip', $request->id_cod_particip)->delete()
+        $res= Votaciones::where('id_cod_particip', $request->id_cod_particip)->delete();
+        return $res;
     }
 }
