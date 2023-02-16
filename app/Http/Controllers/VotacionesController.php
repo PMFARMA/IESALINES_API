@@ -85,7 +85,7 @@ class VotacionesController extends Controller
     }
     public function destroyJuradoVotaciones(Request $request)
     {
-        $res= Votaciones::where('id_jurado', $request->id_jurado)->delete();
-        return $res;
+        $res2= Votaciones::where('id_jurado', $request->id_jurado)->delete();
+        return $res2;
     }
 }
