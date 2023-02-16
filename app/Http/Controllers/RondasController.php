@@ -113,12 +113,13 @@ class RondasController extends Controller
     }
 
     public function activacionRonda(Request $request){
-       
+
         $idEdicion = TipoJurado::where('id_edicion',$request->id_edicion)->update(['aceptacion_ronda'=>$request->aceptacion_ronda]);
         return $idEdicion;
 
-        
+
     }
+
 }
 
 ["key"=>"valor"];
