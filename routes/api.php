@@ -10,6 +10,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\TipoJuradoController;
 use App\Http\Controllers\PopUpController;
 use App\Http\Controllers\RondasController;
+use App\Http\Controllers\VotacionesController;
 
 
 //Auth
