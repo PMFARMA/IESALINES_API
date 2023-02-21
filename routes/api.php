@@ -52,3 +52,6 @@ Route::get('/ronda/subcat-porcentaje',[RondasController::class,'subCategoriaPorc
 Route::put('/ronda/switch', [RondasController::class, 'activacionRonda']);
 Route::delete('/ronda/subcat-votaciones', [VotacionesController::class, 'destroySubcatVotaciones']);
 Route::delete('/ronda/jurado-votaciones', [VotacionesController::class, 'destroyJuradoVotaciones']);
+
+
+Route::get('/ronda/jurados-result/{id}',[VotacionesController::class, 'getResultSpecificSubcatJurados']);
