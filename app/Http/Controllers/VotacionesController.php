@@ -88,4 +88,9 @@ class VotacionesController extends Controller
         $res2= Votaciones::where('id_jurado', $request->id_jurado)->delete();
         return $res2;
     }
+    public function getResultSubcat(Request $request)
+    {
+        $res2= Votaciones::where('id_jurado', $request->id_jurado)->delete();
+        return $res2;
+    }
 }
