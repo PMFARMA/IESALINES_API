@@ -37,12 +37,24 @@ class MailController extends Controller
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
+
             case 'iniciacion':
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
             case 'recordatiorio':
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+                return response()->json(['message'=>'Mensaje enviado'],201); 
+                break;
+
+            case 'login':
+                $encrypted = Crypt::encryptString($request->emailtomsg);
+                $url= URL::signedRoute('login', ['email'=>$encrypted]);
+                $separateUrl=explode('/',$url);
+                
+                $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+
+                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
                 break;
         }
