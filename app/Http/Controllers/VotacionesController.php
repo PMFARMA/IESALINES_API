@@ -93,4 +93,16 @@ class VotacionesController extends Controller
         $res2= Votaciones::where('id_jurado', $request->id_jurado)->delete();
         return $res2;
     }
+
+    public function getResultSpecificSubcatJurados($id){
+        $res = Votaciones::from('as_edicion_obras_voto_jurado as votaciones')->select('as_edicion_obras.titulo','voto','as_jurado.nombre','as_jurado.empresa')->join('as_jurado','as_jurado.id','=','votaciones.id_jurado')->join('as_edicion_obras','as_edicion_obras.id','=','votaciones.id_obra')->where('votaciones.id_cod_particip',$id)->whereIn('votaciones.voto',array('d','dd','o','od'))->get();
+
+        return $res;
+    }
+
+
+
+
+
+
 }

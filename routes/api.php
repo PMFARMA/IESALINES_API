@@ -14,7 +14,7 @@ use App\Http\Controllers\VotacionesController;
 
 
 //Auth
-Route::post('/login', [LoginController::class, 'login'])->middleware('web');
+Route::post('/login', [LoginController::class, 'login'])->name('login')->middleware('signed');;
 Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::post('/email', [MailController::class, 'storemail'])->name('storemail');
@@ -54,3 +54,6 @@ Route::put('/ronda/switch', [RondasController::class, 'activacionRonda']);
 Route::delete('/ronda/subcat-votaciones', [VotacionesController::class, 'destroySubcatVotaciones']);
 Route::delete('/ronda/jurado-votaciones', [VotacionesController::class, 'destroyJuradoVotaciones']);
 Route::get('/ronda/subcat-result', [VotacionesController::class, 'getResultSubcat']);
+
+
+Route::get('/ronda/jurados-result/{id}',[VotacionesController::class, 'getResultSpecificSubcatJurados']);
