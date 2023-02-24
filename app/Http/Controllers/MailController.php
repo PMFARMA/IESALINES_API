@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailsMailable;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Crypt;
+
+use App\Models\User;
 
 class MailController extends Controller
 
@@ -48,14 +51,20 @@ class MailController extends Controller
                 break;
 
             case 'login':
-                $encrypted = Crypt::encryptString($request->emailtomsg);
-                $url= URL::signedRoute('login', ['email'=>$encrypted]);
+                
+                $user = User::select('id')->where('email',$emailtomsg)->get();
+    
+                $encrypted = Crypt::encryptString($user[0]->id);
+         
+                $url= URL::signedRoute('login', ['id'=>$encrypted]);
+
                 $separateUrl=explode('/',$url);
                 
                 $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
 
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
+            
                 break;
         }
         // return $emailtomsg;
