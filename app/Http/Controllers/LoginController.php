@@ -66,18 +66,20 @@ class LoginController extends Controller
     // }
     private function generatePass(){
         $hashed_random_password = Hash::make(str_random(8));
+        return $hashed_random_password;
     }
 
     public function login(Request $request,$id){
 
         $decrypt = Crypt::decryptString($id);
-        return $decrypt;
+        
         $user = User::where('email',$decrypt)->first();
 
         if($user){
             if($user->id>1000){
                 $rol = 1000;
             }else{
+                $this->generatePass();
                 $rol = 999;
             }
             $token = $user->createToken("auth_token")->plainTextToken;

@@ -51,9 +51,11 @@ class MailController extends Controller
                 break;
 
             case 'login':
-                
+
                 $user = User::select('id')->where('email',$emailtomsg)->get();
     
+                if(count($user) != 0){
+
                 $encrypted = Crypt::encryptString($user[0]->id);
          
                 $url= URL::signedRoute('login', ['id'=>$encrypted]);
@@ -66,6 +68,9 @@ class MailController extends Controller
                 return response()->json(['message'=>'Mensaje enviado'],201); 
             
                 break;
+                }else{
+                    return response()->json(['message'=>'Mensaje no enviado'],201);
+                }
         }
         // return $emailtomsg;
         // $amsg = $request->get("asuntotest");
