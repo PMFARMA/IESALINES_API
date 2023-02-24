@@ -99,6 +99,7 @@ class VotacionesController extends Controller
         // $w = EdicionObras::from('as_edicion_obras as obras')->selectRaw('obras.id,obras.titulo,count(*)')->join('as_edicion_obras_voto_jurado','as_edicion_obras_voto_jurado.id_obra','=','obras.id')->where('obras.id_cod_particip','=', $id)->get();
         $w = EdicionObras::select('id','titulo','id_cod_particip')->where('id_cod_particip', $id)->get();
 
+        // return $w;
         // $w = DB::table('as_edicion_obras')->select('id',(DB::table('as_edicion_obras_voto_jurado')->select('count(*)')))->where('id_cod_particip',$id)
         // ->get();
         // return $w;
@@ -107,11 +108,22 @@ class VotacionesController extends Controller
         // return $vd;
         $arraydeVotaciones = [];
         foreach ($w as $z){
-            $v = Votaciones::select('id_obra','voto','id_cod_particip')->where('id_obra', $z->id)->get();
-    
-            array_push($arraydeVotaciones,$v);
+            $v = Votaciones::select('voto')->where('id_obra', $z->id)->distinct()->get();
+            $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $z->id)->get();
+
+            
+            // return $total;
+           $ola =  array_merge($v, $total);
+            return $ola;
+            array_push($arraydeVotaciones,[$z,$total,$v]);
             // array_push($arrTest,[$z->titulo,$z->id_cod_particip,$z->id]);
         }
+
+        $arrayFinal = [];
+
+
+        $totalObrasVotadas = count($arraydeVotaciones) ;
+
 
         return $arraydeVotaciones;
         // return $arrTest;
