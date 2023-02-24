@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subcategorias;
 use App\Models\Votaciones;
 use Illuminate\Http\Request;
 
@@ -90,8 +91,46 @@ class VotacionesController extends Controller
     }
     public function getResultSubcat(Request $request)
     {
-        $res2= Votaciones::where('id_jurado', $request->id_jurado)->delete();
-        return $res2;
+        $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'votos.id_obra','votos.voto','subcategorias.id_area','subcategorias.codigo', 'subcategorias.id')->join('as_edicion_obras_voto_jurado AS votos','votos.id_cod_particip','=','subcategorias.id')->where('subcategorias.id_edicion',28)->whereIn('votos.voto',array('d','dd','o','od'))->get();
+        // foreach ($res3 as $votoInfo) {
+            //
+            // var_dump($votoInfo );
+
+            // return ;
+            // switch ($voto->voto) {
+            //     case 'o':
+            //         # code...
+            //         break;
+            //     case 'od':
+            //         # code...
+            //         break;
+            //     case 'd':
+            //         # code...
+            //         break;
+            //     case 'dd':
+            //         # code...
+            //         break;
+            // }
+        // }
+
+             $array_votaciones = [];
+       for($i = 0;$i<count($res3);$i++){
+
+            // if($array_votaciones[$res3[$i]->id ])
+            array_push($array_votaciones,[$res3[$i]->id ,$res3[$i]->voto], );
+
+       }
+
+
+       for($i=0;$i<count($array_votaciones);$i++){
+        for($j=0;$j<count($array_votaciones);$j++){
+            if($array_votaciones[$i][0]==$array_votaciones[$j][0]){
+                if
+            }
+        }
+       };
+
+return $array_votaciones;
     }
 
     public function getResultSpecificSubcatJurados($id){
