@@ -91,27 +91,51 @@ class VotacionesController extends Controller
     }
     public function getResultSubcat(Request $request)
     {
+        $o =0;
+        $od = 0;
+        $d = 0;
+        $dd = 0;
+        $array_subcategorias = [];
         $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'votos.id_obra','votos.voto','subcategorias.id_area','subcategorias.codigo', 'subcategorias.id')->join('as_edicion_obras_voto_jurado AS votos','votos.id_cod_particip','=','subcategorias.id')->where('subcategorias.id_edicion',28)->whereIn('votos.voto',array('d','dd','o','od'))->get();
-        // foreach ($res3 as $votoInfo) {
-            //
-            // var_dump($votoInfo );
 
-            // return ;
-            // switch ($voto->voto) {
-            //     case 'o':
-            //         # code...
-            //         break;
-            //     case 'od':
-            //         # code...
-            //         break;
-            //     case 'd':
-            //         # code...
-            //         break;
-            //     case 'dd':
-            //         # code...
-            //         break;
+        $user_votando = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.id", 'subcategorias.descrip')->where('subcategorias.id_edicion',28)->get();
+        // return $user_votando;
+        foreach ($user_votando as $id_votar) {
+            $votos_totales = [];
+            foreach ($res3 as $key) {
+                if ($id_votar['id'] ==$key['id']){
+                    // return $key;
+                    switch ($key['voto']) {
+                        case 'o':
+                            $o++;
+                            break;
+                        case 'od':
+                            $od++;
+                            break;
+                        case 'd':
+                            $d++;
+                            break;
+                        case 'dd':
+                            $dd++;
+                            break;
+                    }
+                }
+            }
+            $votos_totales = array(
+                "oro" => $o,
+                "oro_desierto"=>$od,
+                "aspid" => $d,
+                "desierto_aspid" => $dd,
+                "descripcion" => $id_votar['descrip']
+            );
+            arsort($votos_totales);
+            // if ($votos_totales[0] == $votos_totales[1]) {
+            //     $votos_totales[0] = 'Empate';
             // }
-        // }
+            // return $votos_totales;
+            array_push($array_subcategorias,$votos_totales);
+        }
+        return $array_subcategorias;
 
              $array_votaciones = [];
        for($i = 0;$i<count($res3);$i++){
@@ -125,7 +149,7 @@ class VotacionesController extends Controller
        for($i=0;$i<count($array_votaciones);$i++){
         for($j=0;$j<count($array_votaciones);$j++){
             if($array_votaciones[$i][0]==$array_votaciones[$j][0]){
-                if
+
             }
         }
        };
