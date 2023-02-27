@@ -103,29 +103,53 @@ class VotacionesController extends Controller
         // $w = DB::table('as_edicion_obras')->select('id',(DB::table('as_edicion_obras_voto_jurado')->select('count(*)')))->where('id_cod_particip',$id)
         // ->get();
         // return $w;
-        $vd = Votaciones::select('voto','id_cod_particip')->where('id_cod_particip', $id)->whereIn('voto',array('dd','od'))->get();
+        $vd = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd','od'))->get();
 
+       
         // return $vd;
         $arraydeVotaciones = [];
         foreach ($w as $z){
-            $v = Votaciones::select('voto')->where('id_obra', $z->id)->distinct()->get();
+            $v = Votaciones::selectRaw('voto')->where('id_obra', $z->id)->distinct()->get();
             $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $z->id)->get();
 
-            
-            // return $total;
-           $ola =  array_merge($v, $total);
-            return $ola;
-            array_push($arraydeVotaciones,[$z,$total,$v]);
-            // array_push($arrTest,[$z->titulo,$z->id_cod_particip,$z->id]);
+            // return $w;
+            count($v)>0 && $z->voto = $v[0]->voto;
+            count($total)>0 && $z->total = $total[0]->total;
+ 
+            array_push($arraydeVotaciones,$z);
+            // array_push($arraydeVotaciones,[$z,$v,$total]);
         }
 
-        $arrayFinal = [];
+        // return $arraydeVotaciones;
 
+        $sort = false;
+        while (!$sort) {
+            $sort = true;
+            $i=0;
+            $aux;
+            while($i<count($arraydeVotaciones)-1){
+                if($arraydeVotaciones[$i]->total<$arraydeVotaciones[$i+1]->total){
+                    $sort = false;
+                    $aux = $arraydeVotaciones[$i];
+                    $arraydeVotaciones[$i]=$arraydeVotaciones[$i+1];
+                    $arraydeVotaciones[$i+1] = $aux;
+                }
+                $i++;
+            }
+        }
 
-        $totalObrasVotadas = count($arraydeVotaciones) ;
-
-
-        return $arraydeVotaciones;
+        $result = 0;
+        $totalVotos=$vd[0]->desierto;
+        
+        foreach($arraydeVotaciones as $data){
+            $totalVotos = $totalVotos+$data->total;
+            // return $data->total;
+        }
+        
+        $result = $totalVotos * $vd[0]->desierto /100;
+        return $result;
+        // return ["info"=>$arraydeVotaciones,"porcentaje"=>count($arraydeVotaciones)+];
+        // return 'hola';
         // return $arrTest;
         // $results = [];
         // foreach($arraydeVotaciones as $voto){
