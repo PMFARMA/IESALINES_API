@@ -56,3 +56,6 @@ Route::delete('/ronda/jurado-votaciones', [VotacionesController::class, 'destroy
 
 
 Route::get('/ronda/jurados-result/{id}',[VotacionesController::class, 'getResultSpecificSubcatJurados']);
+
+
+Route::get('/prueba',[LoginController::class,'generatePass']);
