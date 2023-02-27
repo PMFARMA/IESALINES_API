@@ -14,7 +14,8 @@ use App\Http\Controllers\VotacionesController;
 
 
 //Auth
-Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');;
+Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');
+Route::post('/login-admin',[LoginController::class, 'loginAdmin']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::post('/email', [MailController::class, 'storemail'])->name('storemail');

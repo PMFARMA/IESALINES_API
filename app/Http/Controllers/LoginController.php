@@ -64,16 +64,16 @@ class LoginController extends Controller
 
     //     return false;
     // }
-    private function generatePass(){
-        $hashed_random_password = Hash::make(str_random(8));
-        return $hashed_random_password;
+    public function generatePass(){
+        // $hashed_random_password = Hash::make(str_random(8));
+        // return $hashed_random_password;
     }
 
     public function login(Request $request,$id){
 
         $decrypt = Crypt::decryptString($id);
         
-        $user = User::where('email',$decrypt)->first();
+        $user = User::where('id',$decrypt)->first();
 
         if($user){
             if($user->id>1000){
@@ -88,5 +88,10 @@ class LoginController extends Controller
         }else{
             return response()->json(["message"=>"no hay usuario con este email"],404);
         }
+    }
+
+
+    public function loginAdmin(Request $request){
+
     }
 }

@@ -52,7 +52,7 @@ class MailController extends Controller
 
             case 'login':
 
-                $user = User::select('id')->where('email',$emailtomsg)->get();
+                $user = User::select('id')->where('email',$emailtomsg)->where('id_edicion',28)->get();
     
                 if(count($user) != 0){
 
