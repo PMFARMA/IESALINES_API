@@ -95,6 +95,7 @@ class VotacionesController extends Controller
         $od = 0;
         $d = 0;
         $dd = 0;
+        $voto1 = 0;
         $array_subcategorias = [];
         $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'votos.id_obra','votos.voto','subcategorias.id_area','subcategorias.codigo', 'subcategorias.id')->join('as_edicion_obras_voto_jurado AS votos','votos.id_cod_particip','=','subcategorias.id')->where('subcategorias.id_edicion',28)->whereIn('votos.voto',array('d','dd','o','od'))->get();
 
@@ -128,11 +129,25 @@ class VotacionesController extends Controller
                 "desierto_aspid" => $dd,
                 "descripcion" => $id_votar['descrip']
             );
+            $count = 0;
             arsort($votos_totales);
             // if ($votos_totales[0] == $votos_totales[1]) {
             //     $votos_totales[0] = 'Empate';
             // }
             // return $votos_totales;
+            foreach ($votos_totales as $voto) {
+                // return var_dump(getType($voto));
+                if (!$voto1 && getType($voto) != 'string') {
+                    $voto1 = $voto;
+                    // return $voto1;
+                }else{
+                    if ($voto1 == $voto) {
+                        # code...
+                    }else{
+
+                    }
+                }
+            }
             array_push($array_subcategorias,$votos_totales);
         }
         return $array_subcategorias;
