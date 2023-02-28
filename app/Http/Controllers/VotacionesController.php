@@ -99,12 +99,13 @@ class VotacionesController extends Controller
         $array_subcategorias = [];
         $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'votos.id_obra','votos.voto','subcategorias.id_area','subcategorias.codigo', 'subcategorias.id')->join('as_edicion_obras_voto_jurado AS votos','votos.id_cod_particip','=','subcategorias.id')->where('subcategorias.id_edicion',28)->whereIn('votos.voto',array('d','dd','o','od'))->get();
 
-        $user_votando = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.id", 'subcategorias.descrip')->where('subcategorias.id_edicion',28)->get();
+        $user_votando = Subcategorias::from('as_edicion_obras AS obras')->select("obras.id", 'obras.descripcion', 'obras.id_cod_particip')->join('as_edicion_cods_particip AS votos','votos.id','=','obras.id_cod_particip')->where('votos.id_edicion',28)->get();
         // return $user_votando;
         foreach ($user_votando as $id_votar) {
+            return $id_votar;
             $votos_totales = [];
             foreach ($res3 as $key) {
-                if ($id_votar['id'] ==$key['id']){
+                if ($id_votar['id_cod_particip'] ==$key['id']){
                     // return $key;
                     switch ($key['voto']) {
                         case 'o':
