@@ -26,4 +26,6 @@ class Subcategorias extends Model
         "integralPartidoOro",
         "incompatibilidades"
     ];
+
+
 }

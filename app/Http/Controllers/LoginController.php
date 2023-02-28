@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     // /**
@@ -63,17 +64,22 @@ class LoginController extends Controller
 
     //     return false;
     // }
+    public function generatePass(){
+        // $hashed_random_password = Hash::make(str_random(8));
+        // return $hashed_random_password;
+    }
 
+    public function login(Request $request,$id){
 
-    public function login(Request $request){
-
-        $decrypt = Crypt::decryptString($request->email);
-        $user = User::where('email',$decrypt)->first();
+        $decrypt = Crypt::decryptString($id);
+        
+        $user = User::where('id',$decrypt)->first();
 
         if($user){
             if($user->id>1000){
                 $rol = 1000;
             }else{
+                $this->generatePass();
                 $rol = 999;
             }
             $token = $user->createToken("auth_token")->plainTextToken;
@@ -82,5 +88,10 @@ class LoginController extends Controller
         }else{
             return response()->json(["message"=>"no hay usuario con este email"],404);
         }
+    }
+
+
+    public function loginAdmin(Request $request){
+
     }
 }
