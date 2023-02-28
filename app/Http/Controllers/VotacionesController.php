@@ -92,32 +92,24 @@ class VotacionesController extends Controller
     }
 
     public function  getResultSpecificSubcat(Request $request, $id){
-        $arrTest=[];
-        // $results = Votaciones::from('as_edicion_obras_voto_jurado as votaciones')->select('id_obra', 'voto')->where('id_cod_particip', $id)->whereIn('votaciones.voto', array('d','dd','o','od'))->get();
-        // return $results;
         
-        // $w = EdicionObras::from('as_edicion_obras as obras')->selectRaw('obras.id,obras.titulo,count(*)')->join('as_edicion_obras_voto_jurado','as_edicion_obras_voto_jurado.id_obra','=','obras.id')->where('obras.id_cod_particip','=', $id)->get();
-        $w = EdicionObras::select('id','titulo','id_cod_particip')->where('id_cod_particip', $id)->get();
+        $obras = EdicionObras::select('id','titulo','id_cod_particip')->where('id_cod_particip', $id)->get();
 
-        // return $w;
-        // $w = DB::table('as_edicion_obras')->select('id',(DB::table('as_edicion_obras_voto_jurado')->select('count(*)')))->where('id_cod_particip',$id)
-        // ->get();
-        // return $w;
-        $vd = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd','od'))->get();
+        $votosDesierto = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd','od'))->get();
 
        
-        // return $vd;
+        // return $votosDesierto;
         $arraydeVotaciones = [];
-        foreach ($w as $z){
-            $v = Votaciones::selectRaw('voto')->where('id_obra', $z->id)->distinct()->get();
-            $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $z->id)->get();
+        foreach ($obras as $obra){
+            $votaciones = Votaciones::selectRaw('voto')->where('id_obra', $obra->id)->distinct()->get();
+            $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $obra->id)->get();
 
             // return $w;
-            count($v)>0 && $z->voto = $v[0]->voto;
-            count($total)>0 && $z->total = $total[0]->total;
+            count($votaciones)>0 && $obra->voto = $votaciones[0]->voto;
+            count($total)>0 && $obra->total = $total[0]->total;
  
-            array_push($arraydeVotaciones,$z);
-            // array_push($arraydeVotaciones,[$z,$v,$total]);
+            array_push($arraydeVotaciones,$obra);
+            // array_push($arraydeVotaciones,[$obra,$v,$total]);
         }
 
         // return $arraydeVotaciones;
@@ -139,35 +131,25 @@ class VotacionesController extends Controller
         }
 
         $result = 0;
-        $totalVotos=$vd[0]->desierto;
+        $totalVotos=$votosDesierto[0]->desierto; // sumamos al total de votos el desierto para obtener el total de votos de la subcategoria.
         
         foreach($arraydeVotaciones as $data){
             $totalVotos = $totalVotos+$data->total;
-            // return $data->total;
+       
+        }
+       
+       if ($totalVotos > 0 && $votosDesierto[0]->desierto > 0) {
+            $result = floor($votosDesierto[0]->desierto/$totalVotos * 100);
+    
+
+        }else if($totalVotos == 0 && $votosDesierto[0]->desierto>0){
+            $result = 100;
+        }else{
+            $result = 0;
         }
         
-        $result = $totalVotos * $vd[0]->desierto /100;
-        return $result;
-        // return ["info"=>$arraydeVotaciones,"porcentaje"=>count($arraydeVotaciones)+];
-        // return 'hola';
-        // return $arrTest;
-        // $results = [];
-        // foreach($arraydeVotaciones as $voto){
-        //     // return $voto;
-        //     foreach($arrTest as $result ){
-        //         return $result;
-        //         // return [$result[1],$voto->id_cod_particip];
-        //         if($result[2]==$voto->id_obra){
-        //             array_push($results,[$result[0],$result[1],$voto->voto]);
-        //         //     return 'hola';
-        //         }
-        //     }
-        // }
-        // return $results;
-        // // $tVotos = Votaciones::selectRaw('count(*)')->where('id_obra', $results->id_obra)->where('id_cod_particip', $id)->get();
-        // // array_push($arrTest,$tVotos);
-                 
-           
+        return response()->json(["informacion"=>$arraydeVotaciones, "porcentaje-desierto"=>$result, "votos-desierto"=>$votosDesierto[0]->desierto]);
+         
         
     }
 }
