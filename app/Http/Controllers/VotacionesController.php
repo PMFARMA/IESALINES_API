@@ -107,12 +107,12 @@ class VotacionesController extends Controller
 
 
     public function  getResultSpecificSubcat(Request $request, $id){
-        
+
         $obras = EdicionObras::select('id','titulo','id_cod_particip')->where('id_cod_particip', $id)->get();
 
         $votosDesierto = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd','od'))->get();
 
-       
+
         // return $votosDesierto;
         $arraydeVotaciones = [];
         foreach ($obras as $obra){
@@ -122,7 +122,7 @@ class VotacionesController extends Controller
             // return $w;
             count($votaciones)>0 && $obra->voto = $votaciones[0]->voto;
             count($total)>0 && $obra->total = $total[0]->total;
- 
+
             array_push($arraydeVotaciones,$obra);
             // array_push($arraydeVotaciones,[$obra,$v,$total]);
         }
@@ -133,7 +133,7 @@ class VotacionesController extends Controller
         while (!$sort) {
             $sort = true;
             $i=0;
-            $aux;
+            $aux = 0;
             while($i<count($arraydeVotaciones)-1){
                 if($arraydeVotaciones[$i]->total<$arraydeVotaciones[$i+1]->total){
                     $sort = false;
@@ -147,24 +147,24 @@ class VotacionesController extends Controller
 
         $result = 0;
         $totalVotos=$votosDesierto[0]->desierto; // sumamos al total de votos el desierto para obtener el total de votos de la subcategoria.
-        
+
         foreach($arraydeVotaciones as $data){
             $totalVotos = $totalVotos+$data->total;
-       
+
         }
-       
+
        if ($totalVotos > 0 && $votosDesierto[0]->desierto > 0) {
             $result = floor($votosDesierto[0]->desierto/$totalVotos * 100);
-    
+
 
         }else if($totalVotos == 0 && $votosDesierto[0]->desierto>0){
             $result = 100;
         }else{
             $result = 0;
         }
-        
+
         return response()->json(["informacion"=>$arraydeVotaciones, "porcentaje-desierto"=>$result, "votos-desierto"=>$votosDesierto[0]->desierto]);
-         
-        
+
+
     }
 }
