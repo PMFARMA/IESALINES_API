@@ -66,11 +66,12 @@ class MailController extends Controller
 
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
                 return response()->json(['message'=>'Mensaje enviado'],201); 
-            
-                break;
+    
                 }else{
                     return response()->json(['message'=>'Mensaje no enviado'],201);
                 }
+    
+                break;
         }
         // return $emailtomsg;
         // $amsg = $request->get("asuntotest");

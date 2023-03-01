@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailsMailable;
+
 class LoginController extends Controller
 {
     // /**
@@ -79,17 +82,17 @@ class LoginController extends Controller
         if($user){
             if($user->id>=1000){
                 $rol = 1000;
-                $token = $user->createToken("auth_token")->plainTextToken;
-                return response()->json(["token"=>$token,"rol"=>$rol]);
-
+               
             }else{
                 $rol = 999;
                 $password = $this->generatePass();
                 $user->password = $password;
                 $user->save();
-                $this->sendEmailToAdmin($password,$rol);
-                
+                $this->sendEmailToAdmin($password,$user->email);
             }
+
+            $token = $user->createToken("auth_token")->plainTextToken;
+            return response()->json(["token"=>$token,"rol"=>$rol]);
 
         }else{
             return response()->json(["message"=>"no hay usuario con este email"],404);
@@ -97,8 +100,14 @@ class LoginController extends Controller
     }
 
 
-    private function sendEmailToAdmin($password,$rol){
-        return response()->json(["rol"=>$rol]);
+    private function sendEmailToAdmin($password,$email){
+
+        $textomsg = ["textomsg"=>'tu email es: '.$email.'
+        <br/> tu contraseña es: '.$password];
+        $asuntomsg = 'usuario y contraseña';
+
+        Mail::to($email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
     }
 
     public function loginAdmin(Request $request){
@@ -107,8 +116,8 @@ class LoginController extends Controller
         
         if($user){
             if($user->password == $request->password){
-                $token = $user->createToken("auth_token")->plainTextToken;
-                return response()->json(["token"=>$token,"rol"=>$rol,"id"=>$decrypt]);
+                
+                return response()->json(["rol"=>$rol,"id"=>$decrypt]);
             }
         }else{
             return response()->json(["message"=>"no se ha encontrado al usuario"],404);
