@@ -93,104 +93,55 @@ class VotacionesController extends Controller
     }
     public function getResultSubcat(Request $request)
     {
-        // $o =0;
-        // $od = 0;
-        // $d = 0;
-        // $dd = 0;
-        // $voto1 = 0;
+
+        $fase = 1;
         $array_subcategorias = [];
-        $empate = 0;
-        $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'subcategorias.id_area','subcategorias.codigo', 'subcategorias.id')->where('subcategorias.id_edicion',28)->get();
+        $tipoEmpate = '';
+        $informacionAux = false;
+        $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'subcategorias.id_area','subcategorias.codigo', 'subcategorias.id', 'Subcategorias.tipo_premio')->where('subcategorias.id_edicion',28)->get();
 
         $user_votando = Subcategorias::from('as_edicion_obras AS obras')->select("obras.id", 'obras.descripcion', 'obras.id_cod_particip')->join('as_edicion_cods_particip AS votos','votos.id','=','obras.id_cod_particip')->where('votos.id_edicion',28)->get();
 
         foreach ($res3 as $subcategoria) {
-            $infoCategoria = $this->getResultSpecificSubcat($request, $subcategoria->id,1);
+            $infoCategoria = $this->getResultSpecificSubcat($request, $subcategoria->id,$fase);
             // return $infoCategoria['informacion'];
-            foreach ($$infoCategoria['informacion'] as $informacion) {
-                if(!$informacion1){
-                    $informacion1 = $informacion;
-                    array_pus($array_subcategorias,);
-                }else{
+            $infoCategoria['id_subcategoria'] = $subcategoria->id;
+            $infoCategoria['codigo'] = $subcategoria->id_area.$subcategoria->codigo;
+            $infoCategoria['titulo'] = $subcategoria->descrip;
+            if($infoCategoria['porcentaje-desierto'] >= 50){
+                $infoCategoria['desierto'] = true;
 
+                if($subcategoria->tipo_premio == 'diploma'){
+                    $infoCategoria['tipo_desierto'] = 'd';
+                }else{
+                    if($fase == 1){
+                        $infoCategoria['tipo_desierto'] = 'o';
+                    }else{
+                        $infoCategoria['tipo_desierto'] = 'p';
+                    }
                 }
-                if ($informacion == $informacion1) {
-                    $empate = 1;
-                    return 'empate';
+
+            }else{
+                $informacionAux = false;
+                foreach ($infoCategoria['informacion'] as $informacion) {
+                    if(!$informacionAux){
+                        $informacionAux = $informacion->total;
+
+                    }else{
+                        if ($informacion->total == $informacionAux) {
+                            $infoCategoria['empate']= True;
+                            $infoCategoria['tipoEmpate'] = $informacion->voto;
+                    }
+                }
             }
         }
-        // return $user_votando;
-    //     foreach ($user_votando as $id_votar) {
-    //         return $id_votar;
-    //         $votos_totales = [];
-    //         foreach ($res3 as $key) {
-    //             if ($id_votar['id_cod_particip'] ==$key['id']){
-    //                 // return $key;
-    //                 switch ($key['voto']) {
-    //                     case 'o':
-    //                         $o++;
-    //                         break;
-    //                     case 'od':
-    //                         $od++;
-    //                         break;
-    //                     case 'd':
-    //                         $d++;
-    //                         break;
-    //                     case 'dd':
-    //                         $dd++;
-    //                         break;
-    //                 }
-    //             }
-    //         }
-    //         $votos_totales = array(
-    //             "oro" => $o,
-    //             "oro_desierto"=>$od,
-    //             "aspid" => $d,
-    //             "desierto_aspid" => $dd,
-    //             "descripcion" => $id_votar['descrip']
-    //         );
-    //         $count = 0;
-    //         arsort($votos_totales);
-    //         // if ($votos_totales[0] == $votos_totales[1]) {
-    //         //     $votos_totales[0] = 'Empate';
-    //         // }
-    //         // return $votos_totales;
-    //         foreach ($votos_totales as $voto) {
-    //             // return var_dump(getType($voto));
-    //             if (!$voto1 && getType($voto) != 'string') {
-    //                 $voto1 = $voto;
-    //                 // return $voto1;
-    //             }else{
-    //                 if ($voto1 == $voto) {
-    //                     # code...
-    //                 }else{
 
-    //                 }
-    //             }
-    //         }
-    //         array_push($array_subcategorias,$votos_totales);
-    //     }
-    //     return $array_subcategorias;
-
-    //          $array_votaciones = [];
-    //    for($i = 0;$i<count($res3);$i++){
-
-    //         // if($array_votaciones[$res3[$i]->id ])
-    //         array_push($array_votaciones,[$res3[$i]->id ,$res3[$i]->voto], );
-
-    //    }
-
-
-    //    for($i=0;$i<count($array_votaciones);$i++){
-    //     for($j=0;$j<count($array_votaciones);$j++){
-    //         if($array_votaciones[$i][0]==$array_votaciones[$j][0]){
-
-    //         }
-    //     }
-    //    };
-
-// return $array_votaciones;
+        array_push($array_subcategorias,$infoCategoria);
     }
+    return $array_subcategorias;
+}
+
+
 
     public function getResultSpecificSubcatJurados($id){
         $res = Votaciones::from('as_edicion_obras_voto_jurado as votaciones')
@@ -226,7 +177,8 @@ class VotacionesController extends Controller
         $arraydeVotaciones = [];
         foreach ($obras as $obra){
             $votaciones = Votaciones::selectRaw('voto')->where('id_obra', $obra->id)->whereIn('voto',array('d',$premio))->distinct()->get();
-            $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $obra->id)->get();
+
+            $total = Votaciones::selectRaw('count(*) as total')->where('id_obra', $obra->id)->whereIn('voto',array('d',$premio))->get();
 
             // return $w;
 
