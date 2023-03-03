@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subcategorias;
 use App\Models\Votaciones;
+use App\Models\Obras;
 use App\Models\EdicionObras;
 use Illuminate\Http\Request;
 use DB;
@@ -237,18 +238,16 @@ class VotacionesController extends Controller
     }
 
     public function setReward(Request $request){
-
-        $premio = Obras::find($request->id_obra);
-        return $premio;
-
         
-        if ($premio) {
-            $premio->premio = $request->premio;
-            $premio->save();
+        $obra= Obras::find($request->id);
+        
+        if ($obra) {
+            $obra->premio = $request->premio;
+            $obra->save();
         } else {
-            return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
+            return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);
         }
-        return response()->json(["message" => "Usuario actualizado"], 201);
+        return response()->json(["message" => "Premio actualizado"], 201);
 
     }
 }
