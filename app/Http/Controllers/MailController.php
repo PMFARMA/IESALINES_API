@@ -34,8 +34,8 @@ class MailController extends Controller
 
                 $encrypted = Crypt::encryptString($request->id);
 
-                $url= URL::temporarySignedRoute('aceptacion',now()->addMinutes(15),['user'=>$encrypted]);
-                
+                $url= URL::temporarySignedRoute('aceptacion',now()->addDays(2),['user'=>$encrypted]);
+
                 $separateUrl=explode('/',$url);
                 
                 $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
