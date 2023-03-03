@@ -59,3 +59,6 @@ Route::get('/ronda/subcat-result', [VotacionesController::class, 'getResultSubca
 
 Route::get('/ronda/jurados-result/{id}',[VotacionesController::class, 'getResultSpecificSubcatJurados']);
 Route::get('/ronda/subcat-result/{id}',[VotacionesController::class, 'getResultSpecificSubcat']);
+
+
+Route::get('/prueba',[LoginController::class,'generatePass']);

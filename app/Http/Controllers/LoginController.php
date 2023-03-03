@@ -9,6 +9,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailsMailable;
+
 class LoginController extends Controller
 {
     // /**
@@ -65,8 +69,8 @@ class LoginController extends Controller
     //     return false;
     // }
     public function generatePass(){
-        // $hashed_random_password = Hash::make(str_random(8));
-        // return $hashed_random_password;
+        $hashed_random_password = Hash::make(Str::random(8));
+        return $hashed_random_password;
     }
 
     public function login(Request $request,$id){
@@ -76,14 +80,20 @@ class LoginController extends Controller
         $user = User::where('id',$decrypt)->first();
 
         if($user){
-            if($user->id>1000){
+
+
+            if(!$user->admin){
                 $rol = 1000;
+                return response()->json(["rol"=>$rol]);
+            
             }else{
-                $this->generatePass();
                 $rol = 999;
+                $password = $this->generatePass();
+                $user->password = $password;
+                $user->save();
+                $this->sendEmailToAdmin($password,$user->email);
+                return response()->json(["rol"=>$rol]);
             }
-            $token = $user->createToken("auth_token")->plainTextToken;
-            return response()->json(["token"=>$token,"rol"=>$rol]);
 
         }else{
             return response()->json(["message"=>"no hay usuario con este email"],404);
@@ -91,7 +101,28 @@ class LoginController extends Controller
     }
 
 
+    private function sendEmailToAdmin($password,$email){
+
+        $textomsg = ["textomsg"=>'tu email es: '.$email.'
+        <br/> tu contraseña es: '.$password];
+        $asuntomsg = 'usuario y contraseña';
+
+        Mail::to($email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+    }
+
     public function loginAdmin(Request $request){
 
+        $user = User::where('email',$request->email);
+        
+        if($user){
+            if($user->password == $request->password){
+                
+                $encrypted = Crypt::encryptString($user->id);
+                return response()->json(["rol"=>$rol,"id"=>$encrypted]);
+            }
+        }else{
+            return response()->json(["message"=>"no se ha encontrado al usuario"],404);
+        }
     }
 }
