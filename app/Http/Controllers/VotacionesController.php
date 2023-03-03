@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subcategorias;
 use App\Models\Votaciones;
+use App\Models\Obras;
 use App\Models\EdicionObras;
 use Illuminate\Http\Request;
 use DB;
@@ -233,6 +234,20 @@ class VotacionesController extends Controller
 
         return ["informacion"=>$arraydeVotaciones, "porcentaje-desierto"=>$result, "votos-desierto"=>$votosDesierto[0]->desierto];
 
+
+    }
+
+    public function setReward(Request $request){
+        
+        $obra= Obras::find($request->id);
+        
+        if ($obra) {
+            $obra->premio = $request->premio;
+            $obra->save();
+        } else {
+            return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);
+        }
+        return response()->json(["message" => "Premio actualizado"], 201);
 
     }
 }
