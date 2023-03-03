@@ -52,23 +52,36 @@ class MailController extends Controller
 
             case 'login':
 
-                $user = User::select('id')->where('email',$emailtomsg)->where('id_edicion',28)->get();
-    
+                $conditionEdicion = true;
+
+                $user = User::select('id')->where('email',$emailtomsg)->get();
+                
                 if(count($user) != 0){
 
-                $encrypted = Crypt::encryptString($user[0]->id);
-         
-                $url= URL::signedRoute('login', ['id'=>$encrypted]);
-
-                $separateUrl=explode('/',$url);
+                    if(!$user->admin){
+                        if($user->id_edicion != 28){
+                            $conditionEdicion = false;
+                        }
+                    }
+                    if($conditionEdicion){
+                        $encrypted = Crypt::encryptString($user[0]->id);
                 
-                $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+                        $url= URL::signedRoute('login', ['id'=>$encrypted]);
 
-                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
-                return response()->json(['message'=>'Mensaje enviado'],201); 
+                        $separateUrl=explode('/',$url);
+                        
+                        $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+
+                        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
+
+                        return response()->json(['message'=>'Mensaje enviado'],201); 
+                        
+                    }else{
+                        return response()->json(['message'=>'Usuario no admin no está registrado en esta edición'],201); 
+                    }
     
                 }else{
-                    return response()->json(['message'=>'Mensaje no enviado'],201);
+                    return response()->json(['message'=>'Usuario no existente'],201);
                 }
     
                 break;

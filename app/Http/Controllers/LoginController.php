@@ -80,19 +80,20 @@ class LoginController extends Controller
         $user = User::where('id',$decrypt)->first();
 
         if($user){
-            if($user->id>=1000){
+
+
+            if(!$user->admin){
                 $rol = 1000;
-               
+                return response()->json(["rol"=>$rol]);
+            
             }else{
                 $rol = 999;
                 $password = $this->generatePass();
                 $user->password = $password;
                 $user->save();
                 $this->sendEmailToAdmin($password,$user->email);
+                return response()->json(["rol"=>$rol]);
             }
-
-            $token = $user->createToken("auth_token")->plainTextToken;
-            return response()->json(["token"=>$token,"rol"=>$rol]);
 
         }else{
             return response()->json(["message"=>"no hay usuario con este email"],404);
@@ -112,12 +113,13 @@ class LoginController extends Controller
 
     public function loginAdmin(Request $request){
 
-        $user = User::where('email',$request->email)->where('id_edicion',28);
+        $user = User::where('email',$request->email);
         
         if($user){
             if($user->password == $request->password){
                 
-                return response()->json(["rol"=>$rol,"id"=>$decrypt]);
+                $encrypted = Crypt::encryptString($user->id);
+                return response()->json(["rol"=>$rol,"id"=>$encrypted]);
             }
         }else{
             return response()->json(["message"=>"no se ha encontrado al usuario"],404);
