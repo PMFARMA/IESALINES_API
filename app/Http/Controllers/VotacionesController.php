@@ -235,4 +235,20 @@ class VotacionesController extends Controller
 
 
     }
+
+    public function setReward(Request $request){
+
+        $premio = Obras::find($request->id_obra);
+        return $premio;
+
+        
+        if ($premio) {
+            $premio->premio = $request->premio;
+            $premio->save();
+        } else {
+            return response()->json(["message" => "Usuario no encontrado en la base de datos"], 404);
+        }
+        return response()->json(["message" => "Usuario actualizado"], 201);
+
+    }
 }
