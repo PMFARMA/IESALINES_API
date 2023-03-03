@@ -31,8 +31,11 @@ class MailController extends Controller
         switch ($typemsg) {
             
             case 'invitacion':
+
                 $encrypted = Crypt::encryptString($request->id);
-                $url= URL::signedRoute('aceptacion', ['user'=>$encrypted]);
+
+                $url= URL::temporarySignedRoute('aceptacion',now()->addMinutes(15),['user'=>$encrypted]);
+                
                 $separateUrl=explode('/',$url);
                 
                 $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
@@ -66,7 +69,7 @@ class MailController extends Controller
                     if($conditionEdicion){
                         $encrypted = Crypt::encryptString($user[0]->id);
                 
-                        $url= URL::signedRoute('login', ['id'=>$encrypted]);
+                        $url= URL::temporarySignedRoute('login', now()->addDays(30),['id'=>$encrypted]);
 
                         $separateUrl=explode('/',$url);
                         
