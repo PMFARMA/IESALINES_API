@@ -70,8 +70,13 @@ class CategoriasController extends Controller
     public function getAuxTipoJuradoSubCat($id){
 
         $data = AuxTipoJuradoSubCat::select('id_subcategoria')->where('id_tipojurado',$id)->get();
+        $arrayIdSubcat = [];
+
+        foreach($data as $id){
+            array_push($arrayIdSubcat,$id->id_subcategoria);
+        }
         
-        return response()->json($data);
+        return response()->json($arrayIdSubcat);
     }
 
 
