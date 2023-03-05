@@ -85,6 +85,8 @@ class PopUpController extends Controller
             "id_tipo_jurado"=>$request->id_tipojurado,
             "id_edicion"=>$request->id_edicion
         ])->where('tipo',$request->tipo);
+
+        return response()->json(["message"=>"PopUp registrado"],200);
     }
 
     /**
