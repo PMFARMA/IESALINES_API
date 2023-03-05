@@ -169,7 +169,7 @@ class VotacionesController extends Controller
             $premio = 'p';
         }
 
-        $obras = EdicionObras::select('id','titulo','id_cod_particip')->where('id_cod_particip', $id)->get();
+        $obras = EdicionObras::select('id','titulo','id_cod_particip','obras')->where('id_cod_particip', $id)->get();
 
         $votosDesierto = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd',$premioDesierto))->get();
 

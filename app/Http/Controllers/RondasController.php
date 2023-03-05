@@ -24,7 +24,7 @@ class RondasController extends Controller
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
-        $jurados = User::select('as_jurado.*', 'as_tipojurado.nombre AS categoria')->where('as_jurado.id_edicion','=','28')->join('as_tipojurado','as_jurado.id_tipojurado','=','as_tipojurado.id')->get();
+        $jurados = User::select('as_jurado.*', 'as_tipojurado.nombre AS categoria')->where('as_jurado.id_edicion','=',$id_edicion)->join('as_tipojurado','as_jurado.id_tipojurado','=','as_tipojurado.id')->get();
 
         $total_sub_categorias = AuxTipoJuradoSubCat::select('*')->get();
         foreach ($total_sub_categorias as $index_subcategoria) {
@@ -105,7 +105,7 @@ class RondasController extends Controller
             foreach($data as $key => $value){
                 $result = Votaciones::selectRaw('count(*)')->where('id_cod_particip',$key)->get();
                 $info = Subcategorias::select('*')->where('id',$key)->get();
-                array_push($arrayFinal,["calculo"=>$result[0]["count(*)"]/$value*100,"area"=>$info[0]->id_area,"codigo"=>$info[0]->codigo,"descripcion"=>$info[0]->descrip]);
+                array_push($arrayFinal,["calculo"=>$result[0]["count(*)"]/$value*100,"area"=>$info[0]->id_area,"codigo"=>$info[0]->codigo,"descripcion"=>$info[0]->descrip,"id_subcategoria"=>$info[0]->id]);
             }
 
         };
