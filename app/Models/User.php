@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'obra_incompatible',
         'empresa',
         'texto',
+        'biografia',
         'nom_imagen',
         'estado_conexion',
         'aceptacion'
