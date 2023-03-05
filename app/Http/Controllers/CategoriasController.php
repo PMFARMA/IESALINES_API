@@ -69,7 +69,7 @@ class CategoriasController extends Controller
 
     public function getAuxTipoJuradoSubCat($id){
 
-        $data = AuxTipoJuradoSubCat::select('*')->where('id_tipojurado',$id)->get();
+        $data = AuxTipoJuradoSubCat::select('id_subcategoria')->where('id_tipojurado',$id)->get();
         
         return response()->json($data);
     }
