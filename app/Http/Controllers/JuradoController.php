@@ -164,7 +164,7 @@ class JuradoController extends Controller
             $user->nom_imagen = $request->nom_imagen;
             $user->cargo = $request->cargo;
             $user->empresa = $request->empresa;
-            $user->texto = $request->texto;
+            $user->biografia = $request->biografia;
             $user->aceptacion = Carbon::now()->format('Y-m-d') . ' ' . Carbon::now()->format('H:i');
             $user->save();
         } else {
