@@ -93,6 +93,7 @@ class TipoJuradoController extends Controller
         if ($tipoJurado) {
             $tipoJurado->limit_Ronda_1 = $request->limit_date;
             $tipoJurado->save();
+            return response()->json(["message" => "fecha actualizada"], 200);
         } else {
             return response()->json(["message" => "Tipo de jurado no encontrado en la base de datos"], 404);
         }
