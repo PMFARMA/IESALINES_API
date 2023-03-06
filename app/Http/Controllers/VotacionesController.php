@@ -74,6 +74,7 @@ class VotacionesController extends Controller
     public function addVoto(Request $request)
     {
 
+        // return $_COOKIEquest
         Votaciones::updateOrCreate(
             [
                 'id_cod_particip'=>$request->id_subcategoria,
