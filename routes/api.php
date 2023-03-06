@@ -62,3 +62,5 @@ Route::get('/ronda/subcat-result/{id}',[VotacionesController::class, 'getResultS
 
 Route::get('/prueba',[LoginController::class,'generatePass']);
 Route::put('/rondas/premio', [VotacionesController::class, 'setReward']);
+
+Route::put('/votos',[VotacionesController::class, 'addVoto']);

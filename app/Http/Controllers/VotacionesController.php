@@ -71,9 +71,20 @@ class VotacionesController extends Controller
      * @param  \App\Models\Votaciones  $votaciones
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Votaciones $votaciones)
+    public function addVoto(Request $request)
     {
-        //
+
+        Votaciones::updateOrCreate(
+            [
+                'id_cod_particip'=>$request->id_subcategoria,
+                "id_jurado"=>$request->id_jurado
+            ],
+            [
+                'id_obra'=>$request->id_obra,
+                'voto'=>$request->voto
+            ]);
+
+        return response()->json(["message"=>"Votado"],200);
     }
 
     /**
