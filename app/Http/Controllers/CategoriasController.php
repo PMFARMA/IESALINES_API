@@ -88,6 +88,7 @@ class CategoriasController extends Controller
         $categorias = Categorias::select('*')->where('id_edicion',28)->get();
 
         foreach($categorias as $categoria){
+            
             $contador = 0;
             $subcategorias = Subcategorias::select('*')->where('id_area',$categoria->id)->where('id_edicion',28)->get();
 
