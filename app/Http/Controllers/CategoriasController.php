@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AuxTipoJuradoSubCat;
 use App\Models\Subcategorias;
+use App\Models\Categorias;
 use App\Models\Edicion;
+use App\Models\Obras;
+use App\Models\Votaciones;
 use Carbon\Carbon;
 
 
@@ -80,5 +83,29 @@ class CategoriasController extends Controller
     }
 
 
+    public function getAllCategories($id){
+
+        $categorias = Categorias::select('*')->where('id_edicion',28)->get();
+
+        foreach($categorias as $categoria){
+            $contador = 0;
+            $subcategorias = Subcategorias::select('*')->where('id_area',$categoria->id)->where('id_edicion',28)->get();
+
+            foreach($subcategorias as $subcategoria){
+                $obras = Obras::select('*')->where('id_cod_particip',$subcategoria->id)->get();
+                $subcategoria->obras = $obras;
+                $voto = Votaciones::select('*')->where('id_cod_particip',$subcategoria->id)->where('id_jurado',$id)->get();
+                
+                
+                count($voto)>0?$subcategoria->votacion = true:$subcategoria->votacion = false;
+                count($voto)>0 && $contador++;
+            }
+            
+            $contador == count($subcategorias)? $categoria->votacion = true : $categoria->votacion = false;
+            $categoria->subcategorias = $subcategorias;
+        }
+        return $categorias;
+        // return $voto;
+    }
     
 }

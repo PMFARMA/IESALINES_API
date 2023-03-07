@@ -64,3 +64,5 @@ Route::get('/prueba',[LoginController::class,'generatePass']);
 Route::put('/rondas/premio', [VotacionesController::class, 'setReward']);
 
 Route::put('/votos',[VotacionesController::class, 'addVoto']);
+
+Route::get('/categorias/{id}',[CategoriasController::class,'getAllCategories']);
