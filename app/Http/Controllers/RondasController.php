@@ -24,56 +24,20 @@ class RondasController extends Controller
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
-        $jurados = User::select('as_jurado.*', 'as_tipojurado.nombre AS categoria')->where('as_jurado.id_edicion','=',$id_edicion)->join('as_tipojurado','as_jurado.id_tipojurado','=','as_tipojurado.id')->get();
 
-        $total_sub_categorias = AuxTipoJuradoSubCat::select('*')->get();
-        foreach ($total_sub_categorias as $index_subcategoria) {
-            switch ($index_subcategoria->id_tipojurado) {
-                case 1:
-                    $creatividad_count = $creatividad_count +1;
-                    break;
+        $jurados = User::select('*')->where('id_edicion',$id_edicion[0]->id)->get();
 
-                case 2:
-                    $formacion_count = $formacion_count + 1;
-                    break;
+        foreach($jurados as $jurado){
 
-                case 3:
-                    $salud_count = $salud_count+1;
-                    break;
-            }
+           $totalVotos = AuxTipoJuradoSubCat::select('*')->where('id_tipojurado',$jurado->id_tipojurado)->count();
+           $totalVotosRealizados = Votaciones::select('*')->where('id_jurado',$jurado->id)->count();
 
+           $totalVotos == 0 && $totalVotos = 1; 
+           $tantoPorciento = $totalVotosRealizados/$totalVotos*100;
+
+           $jurado->progreso = $tantoPorciento;
         }
-
-        foreach ($jurados as $jurado) {
-            // dd($jurado);
-            $total_votacion = Votaciones::select('*')->where('id_jurado','=',$jurado->id)->count();
-            // dd($jurado->categoria);
-            switch ($jurado->categoria) {
-                case 'creatividad':
-                    if ($creatividad_count == 0){
-                        return "No hay categorias de creatividad";
-                    }
-                    $porcentaje = ($total_votacion/$creatividad_count)*100;
-                    array_push($array_final,$jurado,$porcentaje);
-                    break;
-                case 'formacion':
-                    if ($formacion_count == 0){
-                        return "No hay categorias de formacion";
-                    }
-                    $porcentaje = ($total_votacion/$formacion_count)*100;
-                    array_push($array_final,$jurado,$porcentaje);
-                    break;
-                case 'salud':
-                    if ($salud_count == 0){
-                        return "No hay categorias de salud";
-                    }
-                    $porcentaje = ($total_votacion/$salud_count)*100;
-                    array_push($array_final,$jurado,$porcentaje);
-                    break;
-            }
-        }
-        $total = 0;
-        return response()->json([$array_final, $total]);
+        return response()->json($jurados);
 
     }
 
