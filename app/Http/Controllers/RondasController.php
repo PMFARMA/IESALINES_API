@@ -103,6 +103,7 @@ class RondasController extends Controller
         foreach($cantidadJuradosSub as $data){
 
             foreach($data as $key => $value){
+                $value == 0 && $value = 1;
                 $result = Votaciones::selectRaw('count(*)')->where('id_cod_particip',$key)->get();
                 $info = Subcategorias::select('*')->where('id',$key)->get();
                 array_push($arrayFinal,["calculo"=>$result[0]["count(*)"]/$value*100,"area"=>$info[0]->id_area,"codigo"=>$info[0]->codigo,"descripcion"=>$info[0]->descrip,"id_subcategoria"=>$info[0]->id]);
