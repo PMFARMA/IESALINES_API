@@ -123,7 +123,7 @@ class VotacionesController extends Controller
             $infoCategoria['id_subcategoria'] = $subcategoria->id;
             $infoCategoria['codigo'] = $subcategoria->id_area.$subcategoria->codigo;
             $infoCategoria['titulo'] = $subcategoria->descrip;
-            if($infoCategoria['porcentaje-desierto'] >= 50){
+            if($infoCategoria['porcentaje_desierto'] >= 50){
                 $infoCategoria['desierto'] = true;
 
                 if($subcategoria->tipo_premio == 'diploma'){
@@ -246,7 +246,7 @@ class VotacionesController extends Controller
             $result = 0;
         }
 
-        return ["informacion"=>$arraydeVotaciones, "porcentaje-desierto"=>$result, "votos-desierto"=>$votosDesierto[0]->desierto];
+        return ["informacion"=>$arraydeVotaciones, "porcentaje_desierto"=>$result, "votos_desierto"=>$votosDesierto[0]->desierto];
 
 
     }
