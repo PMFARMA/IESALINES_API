@@ -12,9 +12,11 @@ class PopUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $popUp = PopUp::select('*')->where('tipo',$request->tipo)->where('id_edicion',$request->id_edicion);
+        
+        return $popUp;
     }
 
     /**

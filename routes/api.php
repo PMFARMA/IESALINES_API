@@ -66,3 +66,5 @@ Route::put('/rondas/premio', [VotacionesController::class, 'setReward']);
 Route::put('/votos',[VotacionesController::class, 'addVoto']);
 
 Route::get('/categorias/{id}',[CategoriasController::class,'getAllCategories']);
+
+Route::post('/popup',[PopUpController::class,'index']);
