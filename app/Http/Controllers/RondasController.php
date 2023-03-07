@@ -25,7 +25,7 @@ class RondasController extends Controller
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
 
-        $jurados = User::select('*')->where('id_edicion',$id_edicion[0]->id)->get();
+        $jurados = User::select('nombre','id_tipojurado','empresa','id')->where('id_edicion',$id_edicion[0]->id)->get();
 
         foreach($jurados as $jurado){
 
@@ -47,7 +47,7 @@ class RondasController extends Controller
         $arrayFinal = [];
 
         $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
+        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
 
 
         if(count($id_edicion)==0){
