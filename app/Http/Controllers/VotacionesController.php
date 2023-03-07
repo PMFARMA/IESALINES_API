@@ -262,7 +262,7 @@ class VotacionesController extends Controller
         } else {
             return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);
         }
-        return response()->json(["message" => "Premio actualizado"], 201);
+        return response()->json(["message" => "Premio actualizado",$request->premio], 201);
 
     }
 }
