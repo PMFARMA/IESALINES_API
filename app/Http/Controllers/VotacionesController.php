@@ -257,6 +257,7 @@ class VotacionesController extends Controller
         
         if ($obra) {
             $obra->premio = $request->premio;
+            $obra->nombre_premio = $request->nombre_premio;
             $obra->save();
         } else {
             return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);

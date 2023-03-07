@@ -19,6 +19,7 @@ class Obras extends Model
     'logs', 
     'publicar_en_archivo', 
     'titulo', 
+    'nombre_premio',
     'descripcion', 
     'estrategia', 
     'plan_accion', 
