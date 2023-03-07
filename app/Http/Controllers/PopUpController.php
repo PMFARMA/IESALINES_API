@@ -14,7 +14,7 @@ class PopUpController extends Controller
      */
     public function index(Request $request)
     {
-        $popUp = PopUp::select('*')->where('tipo',$request->tipo)->where('id_edicion',$request->id_edicion)->get();
+        $popUp = PopUp::select('*')->where('tipo',$request->tipo)->where('id_edicion',$request->id_edicion)->where('id_tipojurado',$request->id_tipojurado)->get();
         
         return $popUp;
     }
