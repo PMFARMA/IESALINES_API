@@ -133,16 +133,20 @@ class MailController extends Controller
         ]);
         $asuntomsg = $asuntomsg["asuntomsg"];
 
-        $emailtomsg = $request->validate([
-            "emailtomsg" => 'required',
-        ]);
 
-        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+        $emails_jurado = User::select('email')->where('id_tipojurado',$request->id_tipojurado)->get();
+
+        foreach($emails_jurado as $email){
+
+            Mail::to($email->email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+        }
+        
 
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
     }
-    
+
     public function mailToRecordatorio(Request $request){
 
         $textomsg = $request->validate([
@@ -157,7 +161,13 @@ class MailController extends Controller
             "emailtomsg" => 'required',
         ]);
 
-        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+        $emails_jurado = User::select('email')->where('id_tipojurado',$request->id_tipojurado)->get();
+
+        foreach($emails_jurado as $email){
+
+            Mail::to($email->email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+        }
 
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
