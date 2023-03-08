@@ -45,7 +45,7 @@ Route::prefix('/admin')->group(function(){
     
     Route::put('/config/limit-votacion',[TipoJuradoController::class,'updateLimitDate']);
     
-    Route::get('/ronda/jurado-porcentajes',[RondasController::class,'juradoPorcentaje']);
+    Route::get('/ronda/jurados-porcentajes',[RondasController::class,'juradoPorcentaje']);
     
     Route::get('/subcategorias',[CategoriasController::class,'getSubCategorias']);
     
@@ -63,7 +63,7 @@ Route::prefix('/admin')->group(function(){
     
     Route::get('/ronda/subcat-result/{id}',[VotacionesController::class, 'getResultSpecificSubcat']);
     
-    Route::put('/rondas/premio', [VotacionesController::class, 'setReward']);
+    Route::put('/ronda/premio', [VotacionesController::class, 'setReward']);
     
 });    
 

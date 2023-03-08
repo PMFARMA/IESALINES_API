@@ -17,6 +17,7 @@ class EdicionController extends Controller
     public function index()
     {
         $id_edicion = Edicion::select('id','anio_romano','anio')->where('estado', 0)->get();
-        return ["id"=>$edicion,"anio_romano"=>$edicion->anio_romano,"anio"=>$edicion->anio];
+
+        return response()->json(["id"=>$edicion,"anio_romano"=>$edicion->anio_romano,"anio"=>$edicion->anio]);
     }
 }
