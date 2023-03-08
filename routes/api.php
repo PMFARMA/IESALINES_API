@@ -15,13 +15,13 @@ use App\Http\Controllers\VotacionesController;
 
 Route::prefix('/admin')->group(function(){
     
-    Route::post('/email-login', [MailController::class, 'mailToLogin'])->name('storemail');
+    Route::post('/email-login', [MailController::class, 'mailToLogin']);
 
-    Route::post('/email-invitacion', [MailController::class, 'mailToinvitacion'])->name('storemail');
+    Route::post('/email-invitacion', [MailController::class, 'mailToinvitacion']);
     
-    Route::post('/email-iniciacion', [MailController::class, 'mailToIniciacion'])->name('storemail');
+    Route::post('/email-iniciacion', [MailController::class, 'mailToIniciacion']);
     
-    Route::post('/email-recordatorio', [MailController::class, 'mailToRecordatiorio'])->name('storemail');
+    Route::post('/email-recordatorio', [MailController::class, 'mailToRecordatorio']);
 
     Route::get('/edicion',[EdicionController::class,'index']);
     

@@ -110,6 +110,7 @@ class MailController extends Controller
             "emailtomsg" => 'required',
         ]);
 
+        
         $encrypted = Crypt::encryptString($request->id);
 
         $url= URL::temporarySignedRoute('aceptacion',now()->addDays(2),['user'=>$encrypted]);
@@ -138,7 +139,8 @@ class MailController extends Controller
 
         foreach($emails_jurado as $email){
 
-            Mail::to($email->email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+            $emailtomsg = ["emailtomsg"=>$email->email];
+            Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
 
         }
         
