@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Models\User;
+use App\Models\Edicion;
 
 class MailController extends Controller
 

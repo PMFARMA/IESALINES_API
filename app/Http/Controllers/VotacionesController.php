@@ -6,7 +6,9 @@ use App\Models\Subcategorias;
 use App\Models\Votaciones;
 use App\Models\Obras;
 use App\Models\EdicionObras;
+use App\Models\Edicion;
 use Illuminate\Http\Request;
+
 use DB;
 
 class VotacionesController extends Controller
@@ -260,7 +262,7 @@ class VotacionesController extends Controller
             $obra->premio = $request->premio;
             $obra->nombre_premio = $request->nombre_premio;
             $obra->save();
-            
+
         } else {
             return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);
         }
