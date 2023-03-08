@@ -15,8 +15,89 @@ use App\Models\Edicion;
 class MailController extends Controller
 
 {
-    public function storemail(Request $request){
+    // public function storemail(Request $request){
   
+        // $textomsg = $request->validate([
+        //     "textomsg" => 'required',
+        // ]);
+        // $asuntomsg = $request->validate([
+        //     "asuntomsg" => 'required',
+        // ]);
+        // $asuntomsg = $asuntomsg["asuntomsg"];
+
+        // $emailtomsg = $request->validate([
+        //     "emailtomsg" => 'required',
+        // ]);
+        // $typemsg = $request->get('typemsg');
+        // switch ($typemsg) {
+            
+        //     case 'invitacion':
+
+        //         $encrypted = Crypt::encryptString($request->id);
+
+        //         $url= URL::temporarySignedRoute('aceptacion',now()->addDays(2),['user'=>$encrypted]);
+
+        //         $separateUrl=explode('/',$url);
+                
+        //         $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
+            
+        //         Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
+        //         return response()->json(['message'=>'Mensaje enviado'],201); 
+        //         break;
+
+            // case 'iniciacion':
+            //     Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+            //     return response()->json(['message'=>'Mensaje enviado'],201); 
+            //     break;
+            // case 'recordatiorio':
+            //     Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+            //     return response()->json(['message'=>'Mensaje enviado'],201); 
+            //     break;
+
+            // case 'login':
+
+                // $conditionEdicion = true;
+
+                // $user = User::select('id','admin')->where('email',$emailtomsg)->get();
+                
+                // $id_edicion = Edicion::select('id')->where('estado', 0)->get();
+
+                // if(count($user) != 0){
+
+                //     if(!$user[0]->admin){
+
+                //         if($user[0]->id_edicion != $id_edicion[0]->id){
+                //             $conditionEdicion = false;
+                //         }
+                //     }
+
+                //     if($conditionEdicion){
+                //         $encrypted = Crypt::encryptString($user[0]->id);
+                
+                //         $url= URL::temporarySignedRoute('login', now()->addDays(30),['email'=>$emailtomsg]);
+
+                //         $separateUrl=explode('/',$url);
+                        
+                //         $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+
+                //         Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
+
+                //         return response()->json(['message'=>'Mensaje enviado'],201); 
+                        
+                //     }else{
+                //         return response()->json(['message'=>'Usuario no admin no está registrado en esta edición'],201); 
+                //     }
+    
+                // }else{
+                //     return response()->json(['message'=>'Usuario no existente'],201);
+                // }
+    
+    //             break;
+    //     }
+    // }
+
+    private function mailToinvitacion(Request $request){
+
         $textomsg = $request->validate([
             "textomsg" => 'required',
         ]);
@@ -28,80 +109,108 @@ class MailController extends Controller
         $emailtomsg = $request->validate([
             "emailtomsg" => 'required',
         ]);
-        $typemsg = $request->get('typemsg');
-        switch ($typemsg) {
+
+        $encrypted = Crypt::encryptString($request->id);
+
+        $url= URL::temporarySignedRoute('aceptacion',now()->addDays(2),['user'=>$encrypted]);
+
+        $separateUrl=explode('/',$url);
+                
+        $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
             
-            case 'invitacion':
+        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
 
-                $encrypted = Crypt::encryptString($request->id);
+        return response()->json(['message'=>'Mensaje enviado'],201); 
+    }
 
-                $url= URL::temporarySignedRoute('aceptacion',now()->addDays(2),['user'=>$encrypted]);
+    private function mailToIniciacion(Request $request){
+
+        $textomsg = $request->validate([
+            "textomsg" => 'required',
+        ]);
+        $asuntomsg = $request->validate([
+            "asuntomsg" => 'required',
+        ]);
+        $asuntomsg = $asuntomsg["asuntomsg"];
+
+        $emailtomsg = $request->validate([
+            "emailtomsg" => 'required',
+        ]);
+
+        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+        return response()->json(['message'=>'Mensaje enviado'],201); 
+        
+    }
+    private function mailToRecordatorio(Request $request){
+
+        $textomsg = $request->validate([
+            "textomsg" => 'required',
+        ]);
+        $asuntomsg = $request->validate([
+            "asuntomsg" => 'required',
+        ]);
+        $asuntomsg = $asuntomsg["asuntomsg"];
+
+        $emailtomsg = $request->validate([
+            "emailtomsg" => 'required',
+        ]);
+
+        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+        return response()->json(['message'=>'Mensaje enviado'],201); 
+        
+    }
+    
+    private function mailToLogin(Request $request){
+        $textomsg = $request->validate([
+            "textomsg" => 'required',
+        ]);
+        $asuntomsg = $request->validate([
+            "asuntomsg" => 'required',
+        ]);
+        $asuntomsg = $asuntomsg["asuntomsg"];
+
+        $emailtomsg = $request->validate([
+            "emailtomsg" => 'required',
+        ]);
+
+        $conditionEdicion = true;
+
+        $user = User::select('id','admin')->where('email',$emailtomsg)->get();
+        
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
+
+        if(count($user) != 0){
+
+            if(!$user[0]->admin){
+
+                if($user[0]->id_edicion != $id_edicion[0]->id){
+                    $conditionEdicion = false;
+                }
+            }
+
+            if($conditionEdicion){
+                $encrypted = Crypt::encryptString($user[0]->id);
+        
+                $url= URL::temporarySignedRoute('login', now()->addDays(30),['email'=>$emailtomsg]);
 
                 $separateUrl=explode('/',$url);
                 
-                $urlToFront=env('URL_FRONT_ACEPTACION').$separateUrl[count($separateUrl)-1]; 
-            
+                $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
+
                 return response()->json(['message'=>'Mensaje enviado'],201); 
-                break;
-
-            case 'iniciacion':
-                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-                return response()->json(['message'=>'Mensaje enviado'],201); 
-                break;
-            case 'recordatiorio':
-                Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-                return response()->json(['message'=>'Mensaje enviado'],201); 
-                break;
-
-            case 'login':
-
-                $conditionEdicion = true;
-
-                $user = User::select('id','admin')->where('email',$emailtomsg)->get();
                 
-                $id_edicion = Edicion::select('id')->where('estado', 0)->get();
+            }else{
+                return response()->json(['message'=>'Usuario no admin no está registrado en esta edición'],201); 
+            }
 
-                if(count($user) != 0){
-
-                    if(!$user[0]->admin){
-
-                        if($user[0]->id_edicion != $id_edicion[0]->id){
-                            $conditionEdicion = false;
-                        }
-                    }
-
-                    if($conditionEdicion){
-                        $encrypted = Crypt::encryptString($user[0]->id);
-                
-                        $url= URL::temporarySignedRoute('login', now()->addDays(30),['email'=>$emailtomsg]);
-
-                        $separateUrl=explode('/',$url);
-                        
-                        $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
-
-                        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
-
-                        return response()->json(['message'=>'Mensaje enviado'],201); 
-                        
-                    }else{
-                        return response()->json(['message'=>'Usuario no admin no está registrado en esta edición'],201); 
-                    }
-    
-                }else{
-                    return response()->json(['message'=>'Usuario no existente'],201);
-                }
-    
-                break;
+        }else{
+            return response()->json(['message'=>'Usuario no existente'],201);
         }
-        // return $emailtomsg;
-        // $amsg = $request->get("asuntotest");
-        // $amsg ='Enhorabuena! Has sido seleccionado como Jurado de los Premios Aspid';
 
-        // Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg));
-        // Mail::to('lauracatalanruiz11@gmail.com')->send(new EmailsMailable($textomsg,$asuntomsg));
-        // return response()->json(['message'=>'Mensaje enviado'],201); 
     }
-
    
 }

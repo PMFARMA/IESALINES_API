@@ -15,8 +15,14 @@ use App\Http\Controllers\VotacionesController;
 
 Route::prefix('/admin')->group(function(){
     
-    Route::post('/email', [MailController::class, 'storemail'])->name('storemail');
+    Route::post('/email-login', [MailController::class, 'mailToLogin'])->name('storemail');
+
+    Route::post('/email-invitacion', [MailController::class, 'mailToinvitacion'])->name('storemail');
     
+    Route::post('/email-iniciacion', [MailController::class, 'mailToIniciacion'])->name('storemail');
+    
+    Route::post('/email-recordatorio', [MailController::class, 'mailToRecordatiorio'])->name('storemail');
+
     Route::get('/edicion',[EdicionController::class,'index']);
     
     Route::get('/jurados',[JuradoController::class,'index']);
@@ -78,7 +84,9 @@ Route::prefix('/jurado')->group(function(){
 });    
 
 // Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');
-Route::post('/login', [LoginController::class, 'login']);
+Route::get('/login/{id}', [LoginController::class, 'login']);
 Route::middleware(['auth:sanctum'])->post('/logout', [LoginController::class, 'logout']);
 
-Route::get('/prueba',function(){return 'hola';});
+Route::middleware(['auth:sanctum'])->get('/prueba',function(){return 'hola';});
+
+

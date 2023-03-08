@@ -18,8 +18,7 @@ class JuradosExport implements FromView
     public function view(): View
     {
 
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
         
         if(count($id_edicion)==0){
