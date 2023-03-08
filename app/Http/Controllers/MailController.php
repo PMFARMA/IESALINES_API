@@ -157,10 +157,6 @@ class MailController extends Controller
         ]);
         $asuntomsg = $asuntomsg["asuntomsg"];
 
-        $emailtomsg = $request->validate([
-            "emailtomsg" => 'required',
-        ]);
-
         $emails_jurado = User::select('email')->where('id_tipojurado',$request->id_tipojurado)->get();
 
         foreach($emails_jurado as $email){
