@@ -73,6 +73,7 @@ class LoginController extends Controller
         return $hashed_random_password;
     }
 
+
     public function login(Request $request,$id){
 
         $decrypt = Crypt::decryptString($id);
@@ -81,18 +82,17 @@ class LoginController extends Controller
 
         if($user){
 
-
             if(!$user->admin){
-                $rol = 1000;
-                return response()->json(["rol"=>$rol]);
+        
+                return response()->json(["rol"=>$user->admin]);
             
             }else{
-                $rol = 999;
+               
                 $password = $this->generatePass();
                 $user->password = $password;
                 $user->save();
                 $this->sendEmailToAdmin($password,$user->email);
-                return response()->json(["rol"=>$rol]);
+                return response()->json(["rol"=>$user->admin]);
             }
 
         }else{
@@ -119,7 +119,9 @@ class LoginController extends Controller
             if($user->password == $request->password){
                 
                 $encrypted = Crypt::encryptString($user->id);
-                return response()->json(["rol"=>$rol,"id"=>$encrypted]);
+                return response()->json(["rol"=>$user->admin,"id"=>$encrypted]);
+            }else{
+                return response()->json(["message"=>"contraseña incorrecta"]);
             }
         }else{
             return response()->json(["message"=>"no se ha encontrado al usuario"],404);
