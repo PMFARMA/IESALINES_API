@@ -96,7 +96,7 @@ class MailController extends Controller
     //     }
     // }
 
-    private function mailToinvitacion(Request $request){
+    public function mailToinvitacion(Request $request){
 
         $textomsg = $request->validate([
             "textomsg" => 'required',
@@ -123,26 +123,7 @@ class MailController extends Controller
         return response()->json(['message'=>'Mensaje enviado'],201); 
     }
 
-    private function mailToIniciacion(Request $request){
-
-        $textomsg = $request->validate([
-            "textomsg" => 'required',
-        ]);
-        $asuntomsg = $request->validate([
-            "asuntomsg" => 'required',
-        ]);
-        $asuntomsg = $asuntomsg["asuntomsg"];
-
-        $emailtomsg = $request->validate([
-            "emailtomsg" => 'required',
-        ]);
-
-        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-
-        return response()->json(['message'=>'Mensaje enviado'],201); 
-        
-    }
-    private function mailToRecordatorio(Request $request){
+    public function mailToIniciacion(Request $request){
 
         $textomsg = $request->validate([
             "textomsg" => 'required',
@@ -162,7 +143,27 @@ class MailController extends Controller
         
     }
     
-    private function mailToLogin(Request $request){
+    public function mailToRecordatorio(Request $request){
+
+        $textomsg = $request->validate([
+            "textomsg" => 'required',
+        ]);
+        $asuntomsg = $request->validate([
+            "asuntomsg" => 'required',
+        ]);
+        $asuntomsg = $asuntomsg["asuntomsg"];
+
+        $emailtomsg = $request->validate([
+            "emailtomsg" => 'required',
+        ]);
+
+        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+        return response()->json(['message'=>'Mensaje enviado'],201); 
+        
+    }
+
+    public function mailToLogin(Request $request){
         $textomsg = $request->validate([
             "textomsg" => 'required',
         ]);
