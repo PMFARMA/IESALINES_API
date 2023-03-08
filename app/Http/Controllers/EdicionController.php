@@ -18,6 +18,6 @@ class EdicionController extends Controller
     {
         $edicion = Edicion::select('id','anio_romano','anio')->where('estado', 0)->get();
 
-        return response()->json(["id"=>$edicion->id,"anio_romano"=>$edicion->anio_romano,"anio"=>$edicion->anio]);
+        return response()->json(["id"=>$edicion[0]->id,"anio_romano"=>$edicion[0]->anio_romano,"anio"=>$edicion[0]->anio]);
     }
 }
