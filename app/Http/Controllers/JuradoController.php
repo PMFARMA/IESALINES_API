@@ -19,9 +19,9 @@ class JuradoController extends Controller
      */
     public function index()
     {
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
+        // return $id_edicion;
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
@@ -36,14 +36,15 @@ class JuradoController extends Controller
 /**////////////////////////////////////////////////////////////////////////////////////////////////// */
     public function create( Request $request)
     {
-        $anio = Carbon::now()->year;
+      
+        $anio = Edicion::select('anio')->where('estado', 0)->get();
 
         $obrasIncompatibles = [];
         $obras = EdicionObras::selectRaw('id,YEAR(fecha_edicion)')->where('empresa_original',$request->empresa)->get();
 
         foreach($obras as $obra){
             
-            if($obra['YEAR(fecha_edicion)']==$anio-1){
+            if($obra['YEAR(fecha_edicion)']==$anio[0]->anio){
                 array_push($obrasIncompatibles,$obra->id);
             }
             
@@ -108,8 +109,7 @@ class JuradoController extends Controller
         if (count($user) > 0) {
 
             /**recogemos el id de la edicion de actual*/
-            $anio = Carbon::now()->year;
-            $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+            $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
             if(count($id_edicion)==0){
                 return response()->json(["message"=>'no hay edición creada para este año'],404);

@@ -18,8 +18,8 @@ class RondasController extends Controller
         $formacion_count=0;
         $salud_count=0;
         $array_final = [];
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
+        
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
@@ -46,8 +46,7 @@ class RondasController extends Controller
         $cantidadJuradosSub = [];
         $arrayFinal = [];
 
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio)->get();
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
 
         if(count($id_edicion)==0){

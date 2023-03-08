@@ -57,19 +57,23 @@ class MailController extends Controller
 
                 $conditionEdicion = true;
 
-                $user = User::select('id')->where('email',$emailtomsg)->get();
+                $user = User::select('id','admin')->where('email',$emailtomsg)->get();
                 
+                $id_edicion = Edicion::select('id')->where('estado', 0)->get();
+
                 if(count($user) != 0){
 
-                    if(!$user->admin){
-                        if($user->id_edicion != 28){
+                    if(!$user[0]->admin){
+
+                        if($user[0]->id_edicion != $id_edicion[0]->id){
                             $conditionEdicion = false;
                         }
                     }
+
                     if($conditionEdicion){
                         $encrypted = Crypt::encryptString($user[0]->id);
                 
-                        $url= URL::temporarySignedRoute('login', now()->addDays(30),['id'=>$encrypted]);
+                        $url= URL::temporarySignedRoute('login', now()->addDays(30),['email'=>$emailtomsg]);
 
                         $separateUrl=explode('/',$url);
                         

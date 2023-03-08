@@ -17,9 +17,7 @@ class CategoriasController extends Controller
     
     public function getSubCategorias(){
 
-        $anio = Carbon::now()->year;
-        $id_edicion = Edicion::select('id')->where('anio', $anio-1)->get();
-
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
       
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
@@ -85,12 +83,14 @@ class CategoriasController extends Controller
 
     public function getAllCategories($id){
 
-        $categorias = Categorias::select('*')->where('id_edicion',28)->get();
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
+
+        $categorias = Categorias::select('*')->where('id_edicion',$id_edicion[0]->id)->get();
 
         foreach($categorias as $categoria){
             
             $contador = 0;
-            $subcategorias = Subcategorias::select('*')->where('id_area',$categoria->id)->where('id_edicion',28)->get();
+            $subcategorias = Subcategorias::select('*')->where('id_area',$categoria->id)->where('id_edicion',$id_edicion[0]->id)->get();
 
             foreach($subcategorias as $subcategoria){
                 $obras = Obras::select('*')->where('id_cod_particip',$subcategoria->id)->get();

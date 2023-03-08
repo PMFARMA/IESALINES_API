@@ -21,40 +21,42 @@ class LoginController extends Controller
     //  * @param  \Illuminate\Http\Request  $request
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => ['required', 'email'],
-    //         'password' => ['required'],
-    //     ]);
+    public function login(Request $request)
+    {
+        
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    //     // if (Auth::attempt($credentials)) {
-    //     //     $request->session()->regenerate();
-    //     //     return auth()->user();
-    //     // }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return auth()->user();
+        }
 
-    //     $password = $credentials['password'];
-    //     $user = User::where('email', $credentials['email'])->where('password', $password)->first();
-    //     if($user){
-    //         Auth::login($user);
-    //         return new UserResource(auth()->user());
-    //     }
-
-
-    //     return response()->json(["message" => "Las credenciales no coinciden con ningún usuario"], 422);
-    // }
+        $password = $credentials['password'];
+        $user = User::where('email', $credentials['email'])->where('password', $password)->first();
+        if($user){
+            Auth::login($user);
+            return new UserResource(auth()->user());
+        }
 
 
-    // public function logout(Request $request)
-    // {
-    //     Auth::logout();
+        return response()->json(["message" => "Las credenciales no coinciden con ningún usuario"], 422);
+    }
 
-    //     $request->session()->invalidate();
 
-    //     $request->session()->regenerateToken();
+    public function logout(Request $request)
+    {
+    
+        Auth::logout();
 
-    //     return response()->json(["message" => "Sesión cerrada correctamente"], 201);
-    // }
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return response()->json(["message" => "Sesión cerrada correctamente"], 201);
+    }
 
     // function attemptLogin(Request $request)
     // {
@@ -68,63 +70,31 @@ class LoginController extends Controller
 
     //     return false;
     // }
-    public function generatePass(){
-        $hashed_random_password = Hash::make(Str::random(8));
-        return $hashed_random_password;
-    }
 
 
-    public function login(Request $request,$id){
+    // public function login(Request $request,$email){
 
-        $decrypt = Crypt::decryptString($id);
-        
-        $user = User::where('id',$decrypt)->first();
+    //     // $request['email'] = $email;
+    //     // $request['password'] = '1';
 
-        if($user){
+    //     // $credentials = $request->validate([
+    //     //             'email' => ['required', 'email'],
+    //     //             'password' => ['required'],
+    //     //         ]);
+      
+    //     // if (Auth::attempt(["email"=>$email,"password"=>''])) {
+    //     //     $request->session()->regenerate();
+    //     //     return auth()->user();
+    //     // }
 
-            if(!$user->admin){
-        
-                return response()->json(["rol"=>$user->admin]);
-            
-            }else{
-               
-                $password = $this->generatePass();
-                $user->password = $password;
-                $user->save();
-                $this->sendEmailToAdmin($password,$user->email);
-                return response()->json(["rol"=>$user->admin]);
-            }
+    //     $user = User::where('email',$email)->first();
 
-        }else{
-            return response()->json(["message"=>"no hay usuario con este email"],404);
-        }
-    }
+    //     if($user){
+    //         Auth::login($user);
+    //         return auth()->user();
+    //     }else{
+    //         return response()->json(["message"=>"no hay usuario con este email"],404);
+    //     }
+    // }
 
-
-    private function sendEmailToAdmin($password,$email){
-
-        $textomsg = ["textomsg"=>'tu email es: '.$email.'
-        <br/> tu contraseña es: '.$password];
-        $asuntomsg = 'usuario y contraseña';
-
-        Mail::to($email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-
-    }
-
-    public function loginAdmin(Request $request){
-
-        $user = User::where('email',$request->email);
-        
-        if($user){
-            if($user->password == $request->password){
-                
-                $encrypted = Crypt::encryptString($user->id);
-                return response()->json(["rol"=>$user->admin,"id"=>$encrypted]);
-            }else{
-                return response()->json(["message"=>"contraseña incorrecta"]);
-            }
-        }else{
-            return response()->json(["message"=>"no se ha encontrado al usuario"],404);
-        }
-    }
 }

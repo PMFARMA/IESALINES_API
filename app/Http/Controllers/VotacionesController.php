@@ -108,14 +108,15 @@ class VotacionesController extends Controller
     }
     public function getResultSubcat(Request $request)
     {
+        $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
         $fase = 1;
         $array_subcategorias = [];
         $tipoEmpate = '';
         $informacionAux = false;
-        $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'subcategorias.id_area','subcategorias.codigo', 'subcategorias.id', 'Subcategorias.tipo_premio')->where('subcategorias.id_edicion',28)->get();
+        $res3 = Subcategorias::from('as_edicion_cods_particip AS subcategorias')->select("subcategorias.descrip",'subcategorias.id_area','subcategorias.codigo', 'subcategorias.id', 'Subcategorias.tipo_premio')->where('subcategorias.id_edicion',$id_edicion[0]->id)->get();
 
-        $user_votando = Subcategorias::from('as_edicion_obras AS obras')->select("obras.id", 'obras.descripcion', 'obras.id_cod_particip')->join('as_edicion_cods_particip AS votos','votos.id','=','obras.id_cod_particip')->where('votos.id_edicion',28)->get();
+        $user_votando = Subcategorias::from('as_edicion_obras AS obras')->select("obras.id", 'obras.descripcion', 'obras.id_cod_particip')->join('as_edicion_cods_particip AS votos','votos.id','=','obras.id_cod_particip')->where('votos.id_edicion',$id_edicion[0]->id)->get();
 
         foreach ($res3 as $subcategoria) {
             $infoCategoria = $this->getResultSpecificSubcat($request, $subcategoria->id,$fase);
@@ -183,7 +184,7 @@ class VotacionesController extends Controller
             $premio = 'p';
         }
 
-        $obras = EdicionObras::select('id','titulo','id_cod_particip','premio')->where('id_cod_particip', $id)->get();
+        $obras = EdicionObras::select('id','titulo','id_cod_particip','premio','nombre_premio')->where('id_cod_particip', $id)->get();
 
         $votosDesierto = Votaciones::selectRaw('count(*) as desierto')->where('id_cod_particip', $id)->whereIn('voto',array('dd',$premioDesierto))->get();
 
@@ -259,6 +260,7 @@ class VotacionesController extends Controller
             $obra->premio = $request->premio;
             $obra->nombre_premio = $request->nombre_premio;
             $obra->save();
+            
         } else {
             return response()->json(["message" => "Obra no encontrado en la base de datos"], 404);
         }
