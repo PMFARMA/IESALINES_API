@@ -85,8 +85,14 @@ Route::prefix('/jurado')->group(function(){
 
 // Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');
 Route::get('/login/{id}', [LoginController::class, 'login']);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
 Route::middleware(['auth:sanctum'])->post('/logout', [LoginController::class, 'logout']);
 
-Route::middleware(['auth:sanctum'])->get('/prueba',function(){return 'hola';});
+Route::middleware('auth:')->get('/prueba',function(){return $request->user();});
 
 

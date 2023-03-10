@@ -89,10 +89,12 @@ class LoginController extends Controller
 
         $user = User::where('email',$email)->first();
 
-        if($user){
-            Auth::login($user);
+       
+        if (Auth::attempt(['email'=>$email,'password'=>''])){;
             return auth()->user();
         }else{
+            Auth::login($user);
+            return auth()->user();
             return response()->json(["message"=>"no hay usuario con este email"],404);
         }
     }

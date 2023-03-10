@@ -7,6 +7,8 @@ use App\Models\Votaciones;
 use App\Models\Obras;
 use App\Models\EdicionObras;
 use App\Models\Edicion;
+use App\Models\User;
+use App\Models\AuxTipoJuradoSubCat;
 use Illuminate\Http\Request;
 
 use DB;
@@ -73,21 +75,30 @@ class VotacionesController extends Controller
      * @param  \App\Models\Votaciones  $votaciones
      * @return \Illuminate\Http\Response
      */
-    public function addVoto(Request $request)
-    {
+    public function addVoto(Request $request){
 
-        // return $_COOKIEquest
-        Votaciones::updateOrCreate(
-            [
-                'id_cod_particip'=>$request->id_subcategoria,
-                "id_jurado"=>$request->id_jurado
-            ],
-            [
-                'id_obra'=>$request->id_obra,
-                'voto'=>$request->voto
-            ]);
+        $user = User::where('id',$request->id_jurado)->get();
 
-        return response()->json(["message"=>"Votado"],200);
+        $subcategorias = AuxTipoJuradoSubCat::select('id_subcategoria')->where('id_tipojurado',$user[0]->id_tipojurado)->get();
+
+        foreach($subcategorias as $subcategoria){
+
+            if($subcategoria->id_subcategoria == $request->id_subcategoria){
+                Votaciones::updateOrCreate(
+                    [
+                        'id_cod_particip'=>$request->id_subcategoria,
+                        "id_jurado"=>$request->id_jurado
+                    ],
+                    [
+                        'id_obra'=>$request->id_obra,
+                        'voto'=>$request->voto
+                    ]);
+        
+                return response()->json(["message"=>"Votado"],200);
+            }
+        }
+
+        return response()->json(["message"=>"el jurado no puede votar en esta obra"],402);
     }
 
     /**
@@ -96,20 +107,17 @@ class VotacionesController extends Controller
      * @param  \App\Models\Votaciones  $votaciones
      * @return \Illuminate\Http\Response
      */
-    public function destroySubcatVotaciones($id)
-    {
+    public function destroySubcatVotaciones($id){
         $res= Votaciones::where('id_cod_particip', $id)->delete();
         return $res;
     }
 
 
-    public function destroyJuradoVotaciones($id)
-    {
+    public function destroyJuradoVotaciones($id){
         $res2= Votaciones::where('id_jurado', $id)->delete();
         return $res2;
     }
-    public function getResultSubcat(Request $request)
-    {
+    public function getResultSubcat(Request $request){
         $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
         $fase = 1;
