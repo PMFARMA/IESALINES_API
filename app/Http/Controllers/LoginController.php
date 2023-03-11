@@ -21,35 +21,38 @@ class LoginController extends Controller
     //  * @param  \Illuminate\Http\Request  $request
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function login(Request $request)
-    // {
+    public function login(Request $request)
+    {
         
-        // $credentials = $request->validate([
-        //     'email' => ['required', 'email'],
-        //     'password' => ['required'],
-        // ]);
+        // return $request;
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
+        // return $credentials;
         // if (Auth::attempt($credentials)) {
         //     $request->session()->regenerate();
         //     return auth()->user();
         // }
 
-        // $password = $credentials['password'];
-        // $user = User::where('email', $credentials['email'])->where('password', $password)->first();
-        // if($user){
-        //     Auth::login($user);
-        //     return new UserResource(auth()->user());
-        // }
+        $password = $credentials['password'];
+        $user = User::where('email', $credentials['email'])->where('password', $password)->first();
+        if($user){
+            Auth::login($user);
+            
+            return auth()->user();
+        }
 
 
-        // return response()->json(["message" => "Las credenciales no coinciden con ningún usuario"], 422);
-    // }
+        return response()->json(["message" => "Las credenciales no coinciden con ningún usuario"], 422);
+    }
 
 
     public function logout(Request $request)
     {
     
-        Auth::logout();
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
@@ -58,45 +61,6 @@ class LoginController extends Controller
         return response()->json(["message" => "Sesión cerrada correctamente"], 201);
     }
 
-    // function attemptLogin(Request $request)
-    // {
-    //     $password = $request->passwd;
-    //     $user = User::where('email',$request->email)->where('passwd', $password)->first();
 
-    //     if ($user) {
-    //         $this->guard()->login($user, $request->has('remember'));
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
-
-    public function login($email){
-
-    //     // $request['email'] = $email;
-    //     // $request['password'] = '1';
-
-    //     // $credentials = $request->validate([
-    //     //             'email' => ['required', 'email'],
-    //     //             'password' => ['required'],
-    //     //         ]);
-      
-    //     // if (Auth::attempt(["email"=>$email,"password"=>''])) {
-    //     //     $request->session()->regenerate();
-    //     //     return auth()->user();
-    //     // }
-
-        $user = User::where('email',$email)->first();
-
-       
-        if (Auth::attempt(['email'=>$email,'password'=>''])){;
-            return auth()->user();
-        }else{
-            Auth::login($user);
-            return auth()->user();
-            return response()->json(["message"=>"no hay usuario con este email"],404);
-        }
-    }
 
 }

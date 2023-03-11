@@ -12,8 +12,9 @@ use App\Http\Controllers\PopUpController;
 use App\Http\Controllers\RondasController;
 use App\Http\Controllers\VotacionesController;
 
+use Illuminate\Http\Request;
 
-Route::prefix('/admin')->group(function(){
+Route::middleware('auth:sanctum')->prefix('/admin')->group(function(){
     
     Route::post('/email-login', [MailController::class, 'mailToLogin']);
 
@@ -73,7 +74,7 @@ Route::prefix('/admin')->group(function(){
     
 });    
 
-Route::prefix('/jurado')->group(function(){
+Route::middleware('auth:sanctum')->prefix('/jurado')->group(function(){
     
     Route::put('/votos',[VotacionesController::class, 'addVoto']);
     
@@ -81,10 +82,14 @@ Route::prefix('/jurado')->group(function(){
     
     Route::post('/popup',[PopUpController::class,'index']);
 
+    Route::get('/prueba',function(Request $request){
+        return 'hola';
+    });
+
 });    
 
 // Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');
-Route::get('/login/{id}', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
