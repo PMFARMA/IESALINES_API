@@ -14,18 +14,14 @@ use Illuminate\Support\Facades\DB;
 class RondasController extends Controller
 {
     public function juradoPorcentaje(){
-        $creatividad_count=0;
-        $formacion_count=0;
-        $salud_count=0;
-        $array_final = [];
-        
+       
         $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
         if(count($id_edicion)==0){
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
 
-        $jurados = User::select('nombre','id_tipojurado','empresa','id')->where('id_edicion',$id_edicion[0]->id)->get();
+        $jurados = User::select('nombre','id_tipojurado','empresa','id')->where('id_edicion',$id_edicion[0]->id)->where('admin',0)->get();
 
         foreach($jurados as $jurado){
 

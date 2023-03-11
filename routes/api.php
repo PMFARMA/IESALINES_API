@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(
     Route::post('/email-iniciacion', [MailController::class, 'mailToIniciacion']);
     
     Route::post('/email-recordatorio', [MailController::class, 'mailToRecordatorio']);
-
+    
     Route::get('/edicion',[EdicionController::class,'index']);
     
     Route::get('/jurados',[JuradoController::class,'index']);
@@ -37,7 +37,7 @@ Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(
     Route::post('/jurados/email',[JuradoController::class,'getUserByEmail']);
     
     Route::get('/jurados/tipos', [TipoJuradoController::class, 'index']);
-   
+    
     Route::put('/aux-subcategorias', [CategoriasController::class, 'relateSubCatTipoJurado']);
     
     Route::get('/aux-subcategorias/{id}', [CategoriasController::class, 'getAuxTipoJuradoSubCat']);
@@ -57,9 +57,9 @@ Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(
     Route::put('/ronda/switch', [RondasController::class, 'activacionRonda']);
     
     Route::delete('/ronda/subcat-votaciones/{id}', [VotacionesController::class, 'destroySubcatVotaciones']);
-   
+    
     Route::delete('/ronda/jurado-votaciones/{id}', [VotacionesController::class, 'destroyJuradoVotaciones']);
-   
+    
     Route::get('/ronda/subcat-result', [VotacionesController::class, 'getResultSubcat']);
     
     Route::get('/ronda/jurados-result/{id}',[VotacionesController::class, 'getResultSpecificSubcatJurados']);
@@ -77,20 +77,20 @@ Route::middleware('auth:sanctum')->prefix('/jurado')->group(function(){
     Route::get('/categorias/{id}',[CategoriasController::class,'getAllCategories']);
     
     Route::post('/popup',[PopUpController::class,'index']);
-
+    
     Route::get('/prueba',function(Request $request){
         return 'hola';
     });
-
+    
 });
 
 Route::post('/email-login', [MailController::class, 'mailToLogin']);
+
 Route::get('/login/{email}', [LoginController::class, 'login'])->name('login')->middleware('signed');
 
 Route::put('jurados/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
 
 Route::middleware(['auth:sanctum'])->post('/logout', [LoginController::class, 'logout']);
-
 
 
 

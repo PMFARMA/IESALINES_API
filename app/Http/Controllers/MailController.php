@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Crypt;
 
 use App\Models\User;
 use App\Models\Edicion;
+use App\Models\Votaciones;
+use App\Models\AuxTipoJuradoSubCat;
 
 class MailController extends Controller
 
@@ -54,23 +56,24 @@ class MailController extends Controller
         ]);
         $asuntomsg = $asuntomsg["asuntomsg"];
 
-
         $emails_jurado = User::select('email')->where('id_tipojurado',$request->id_tipojurado)->get();
+
+        $emailsToSend=[];
 
         foreach($emails_jurado as $email){
 
-            $emailtomsg = ["emailtomsg"=>$email->email];
-            Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-
+            array_push($emailsToSend,$email->email);
         }
         
-
+        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+        
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
     }
 
     public function mailToRecordatorio(Request $request){
 
+        
         $textomsg = $request->validate([
             "textomsg" => 'required',
         ]);
@@ -79,13 +82,23 @@ class MailController extends Controller
         ]);
         $asuntomsg = $asuntomsg["asuntomsg"];
 
-        $emails_jurado = User::select('email')->where('id_tipojurado',$request->id_tipojurado)->get();
+        $jurados = User::select('nombre','id_tipojurado','empresa','id','email')->where('id_tipojurado',$request->id_tipojurado)->where('admin',0)->get();
+        $totalVotos = AuxTipoJuradoSubCat::select('*')->where('id_tipojurado',$request->id_tipojurado)->count();
+        $totalVotos == 0 && $totalVotos = 1; 
+        $emailsToSend=[];
 
-        foreach($emails_jurado as $email){
+        foreach($jurados as $jurado){
 
-            Mail::to($email->email)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+           $totalVotosRealizados = Votaciones::select('*')->where('id_jurado',$jurado->id)->count();
+           
+           $tantoPorciento = $totalVotosRealizados/$totalVotos*100;
 
+           $tantoPorciento<100 && array_push($emailsToSend,$jurado->email);
         }
+        
+        Mail::to($emailsToSend)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+
+
 
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
