@@ -14,7 +14,7 @@ use App\Http\Controllers\VotacionesController;
 
 use Illuminate\Http\Request;
 
-Route::middleware('auth:sanctum')->prefix('/admin')->group(function(){
+Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(){
     
     Route::post('/email-login', [MailController::class, 'mailToLogin']);
 
