@@ -21,24 +21,12 @@ class LoginController extends Controller
     //  * @param  \Illuminate\Http\Request  $request
     //  * @return \Illuminate\Http\Response
     //  */
-    public function login(Request $request)
+    public function login($email)
     {
-        
-        // return $request;
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $user = User::where('email', $email)->orderBy('id','desc')->first();
 
-        // return $credentials;
-        // if (Auth::attempt($credentials)) {
-        //     $request->session()->regenerate();
-        //     return auth()->user();
-        // }
-
-        $password = $credentials['password'];
-        $user = User::where('email', $credentials['email'])->where('password', $password)->first();
         if($user){
+            
             Auth::login($user);
             
             return auth()->user();

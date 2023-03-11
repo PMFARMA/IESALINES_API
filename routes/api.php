@@ -16,8 +16,6 @@ use Illuminate\Http\Request;
 
 Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(){
     
-    Route::post('/email-login', [MailController::class, 'mailToLogin']);
-
     Route::post('/email-invitacion', [MailController::class, 'mailToinvitacion']);
     
     Route::post('/email-iniciacion', [MailController::class, 'mailToIniciacion']);
@@ -37,8 +35,6 @@ Route::middleware(['auth:sanctum','isAdmin'])->prefix('/admin')->group(function(
     Route::post('/jurados/id',[JuradoController::class,'getUserbyId']);
     
     Route::post('/jurados/email',[JuradoController::class,'getUserByEmail']);
-    
-    Route::put('jurados/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
     
     Route::get('/jurados/tipos', [TipoJuradoController::class, 'index']);
    
@@ -86,18 +82,15 @@ Route::middleware('auth:sanctum')->prefix('/jurado')->group(function(){
         return 'hola';
     });
 
-});    
-
-// Route::get('/login/{id}', [LoginController::class, 'login'])->name('login')->middleware('signed');
-Route::post('/login', [LoginController::class, 'login']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });
 
+Route::post('/email-login', [MailController::class, 'mailToLogin']);
+Route::get('/login/{email}', [LoginController::class, 'login'])->name('login')->middleware('signed');
+
+Route::put('jurados/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
 
 Route::middleware(['auth:sanctum'])->post('/logout', [LoginController::class, 'logout']);
 
-Route::middleware('auth:')->get('/prueba',function(){return $request->user();});
+
 
 
