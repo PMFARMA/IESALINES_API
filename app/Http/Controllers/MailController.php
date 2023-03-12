@@ -65,7 +65,7 @@ class MailController extends Controller
             array_push($emailsToSend,$email->email);
         }
         
-        Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
+        Mail::to($emailsToSend)->send(new EmailsMailable($textomsg,$asuntomsg,null));
 
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
