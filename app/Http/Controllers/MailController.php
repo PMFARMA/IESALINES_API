@@ -122,7 +122,7 @@ class MailController extends Controller
 
         $id_edicion = Edicion::select('id')->where('estado', 0)->get();
 
-        $user = User::select('id','admin')->where('email',$emailtomsg["emailtomsg"])->orderBy('id','desc')->get();
+        $user = User::select('id','admin','id_edicion')->where('email',$emailtomsg["emailtomsg"])->orderBy('id','desc')->get();
         
 
         if(count($user) != 0){
@@ -139,8 +139,10 @@ class MailController extends Controller
                 $url= URL::temporarySignedRoute('login', now()->addDays(30),['email' => $request->emailtomsg]);
 
                 $separateUrl=explode('/',$url);
+
+                $auxSeparateUrl = explode('?',$separateUrl[count($separateUrl)-1]);
                 
-                $urlToFront=env('URL_FRONT_LOGIN').$separateUrl[count($separateUrl)-1]; 
+                $urlToFront=env('URL_FRONT_LOGIN').$auxSeparateUrl[0].'/auth?'.$auxSeparateUrl[1]; 
 
                 Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,$urlToFront));
 
