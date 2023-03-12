@@ -6,6 +6,7 @@ use App\Models\TipoJurado;
 use App\Models\Subcategorias;
 use App\Models\Edicion;
 use App\Models\Votaciones;
+use App\Models\Obras;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,20 +22,40 @@ class RondasController extends Controller
             return response()->json(["message"=>'no hay edición creada para este año'],404);
         }
 
-        $jurados = User::select('nombre','id_tipojurado','empresa','id')->where('id_edicion',$id_edicion[0]->id)->where('admin',0)->get();
+        $jurados = User::select('nombre','id_tipojurado','empresa','id','obra_incompatible')->where('id_edicion',$id_edicion[0]->id)->where('admin',0)->get();
 
         foreach($jurados as $jurado){
-
+           
+           $votosIncompatibles = $this->calculoIncompatibles($jurado->obra_incompatible,$jurado->id_tipojurado);
            $totalVotos = AuxTipoJuradoSubCat::select('*')->where('id_tipojurado',$jurado->id_tipojurado)->count();
            $totalVotosRealizados = Votaciones::select('*')->where('id_jurado',$jurado->id)->count();
-
-           $totalVotos == 0 && $totalVotos = 1; 
+           
+           $totalVotos = $totalVotos - $votosIncompatibles;
+           $totalVotos <= 0 && $totalVotos = 1; 
            $tantoPorciento = $totalVotosRealizados/$totalVotos*100;
-
+           $tantoPorciento >100 && $tantoPorciento = 0;
            $jurado->progreso = $tantoPorciento;
         }
         return response()->json($jurados);
 
+    }
+
+    private function calculoIncompatibles($obras,$id_tipojurado){
+
+           $contadorObrasIncompatibles = 0;
+           $obrasIncompatibles = explode(',',$obras);
+
+           if($obrasIncompatibles[0]!=''){
+
+                foreach($obrasIncompatibles as $obra){
+                    $idCod = Obras::select('id_cod_particip')->where('id',$obra)->get();
+                    
+                    $idTip = AuxTipoJuradoSubCat::select('id_tipojurado')->where('id_subcategoria',$idCod[0]->id_cod_particip)->get();
+                    
+                    $idTip[0]->id_tipojurado == $id_tipojurado && $contadorObrasIncompatibles++;
+                }
+            }
+           return $contadorObrasIncompatibles;
     }
 
     public function subCategoriaPorcentaje(){

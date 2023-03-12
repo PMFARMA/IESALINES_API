@@ -66,7 +66,7 @@ class MailController extends Controller
         }
         
         Mail::to($emailtomsg)->send(new EmailsMailable($textomsg,$asuntomsg,null));
-        
+
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
     }
