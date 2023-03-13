@@ -24,6 +24,7 @@ class RondasController extends Controller
 
         $jurados = User::select('nombre','id_tipojurado','empresa','id','obra_incompatible')->where('id_edicion',$id_edicion[0]->id)->where('admin',0)->get();
 
+        $totalPorcientojurados = 0;
         foreach($jurados as $jurado){
            
            $votosIncompatibles = $this->calculoIncompatibles($jurado->obra_incompatible,$jurado->id_tipojurado);
@@ -35,13 +36,19 @@ class RondasController extends Controller
            $tantoPorciento = $totalVotosRealizados/$totalVotos*100;
            $tantoPorciento >100 && $tantoPorciento = 0;
            $jurado->progreso = $tantoPorciento;
+           $totalPorcientojurados = $totalPorcientojurados + $tantoPorciento;
         }
-        return response()->json($jurados);
+        $respuesta = [];
+        $calculoTotal = ($totalPorcientojurados/(count($jurados)*100))*100;
+        array_push($respuesta,["calculo_total"=>$calculoTotal],$jurados);
+
+        return response()->json($respuesta);
 
     }
 
     private function calculoIncompatibles($obras,$id_tipojurado){
 
+        
            $contadorObrasIncompatibles = 0;
            $obrasIncompatibles = explode(',',$obras);
 

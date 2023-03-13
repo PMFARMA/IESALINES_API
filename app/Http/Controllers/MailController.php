@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Edicion;
 use App\Models\Votaciones;
 use App\Models\AuxTipoJuradoSubCat;
+use App\Models\Obras;
 
 class MailController extends Controller
 
@@ -84,14 +85,20 @@ class MailController extends Controller
 
         $jurados = User::select('nombre','id_tipojurado','empresa','id','email')->where('id_tipojurado',$request->id_tipojurado)->where('admin',0)->get();
         $totalVotos = AuxTipoJuradoSubCat::select('*')->where('id_tipojurado',$request->id_tipojurado)->count();
-        $totalVotos == 0 && $totalVotos = 1; 
+        
         $emailsToSend=[];
 
         foreach($jurados as $jurado){
 
+           $votosIncompatibles = $this->calculoIncompatibles($jurado->obra_incompatible,$jurado->id_tipojurado);
+        
+           $totalAuxVotos = $totalVotos - $votosIncompatibles;
+
+           $totalAuxVotos <= 0 && $totalVotos = 1; 
+
            $totalVotosRealizados = Votaciones::select('*')->where('id_jurado',$jurado->id)->count();
            
-           $tantoPorciento = $totalVotosRealizados/$totalVotos*100;
+           $tantoPorciento = $totalVotosRealizados/$totalAuxVotos*100;
 
            $tantoPorciento<100 && array_push($emailsToSend,$jurado->email);
         }
@@ -103,6 +110,24 @@ class MailController extends Controller
         return response()->json(['message'=>'Mensaje enviado'],201); 
         
     }
+
+    private function calculoIncompatibles($obras,$id_tipojurado){
+
+        $contadorObrasIncompatibles = 0;
+        $obrasIncompatibles = explode(',',$obras);
+
+        if($obrasIncompatibles[0]!=''){
+
+             foreach($obrasIncompatibles as $obra){
+                 $idCod = Obras::select('id_cod_particip')->where('id',$obra)->get();
+                 
+                 $idTip = AuxTipoJuradoSubCat::select('id_tipojurado')->where('id_subcategoria',$idCod[0]->id_cod_particip)->get();
+                 
+                 $idTip[0]->id_tipojurado == $id_tipojurado && $contadorObrasIncompatibles++;
+             }
+         }
+        return $contadorObrasIncompatibles;
+ }
 
     public function mailToLogin(Request $request){
 
@@ -138,7 +163,6 @@ class MailController extends Controller
                
                 $url= URL::temporarySignedRoute('login', now()->addDays(30),['email' => $request->emailtomsg]);
 
-            
                 $separateUrl=explode('/',$url);
 
                 $auxSeparateUrl = explode('?',$separateUrl[count($separateUrl)-1]);
