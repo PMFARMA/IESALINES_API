@@ -85,7 +85,7 @@ class TipoJuradoController extends Controller
     {
         //
     }
-    public function updateLimitDate(Request $request, $ronda)
+    public function updateLimitDate(Request $request, $ronda=1)
     {
         $tipoJurado = TipoJurado::find($request->id);
 

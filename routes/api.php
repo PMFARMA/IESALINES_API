@@ -86,10 +86,12 @@ Route::middleware('auth:sanctum')->prefix('/jurado')->group(function(){
 
 Route::post('/email-login', [MailController::class, 'mailToLogin']);
 
-Route::get('/login/{email}', [LoginController::class, 'login'])->name('login')->middleware('signed');
+Route::get('/login/{email}', [LoginController::class, 'login'])->name('login')->middleware('signed');//falta el signed Rout middleware;
 
 Route::put('jurados/aceptacion/{user}',[JuradoController::class,'userConfirmation'])->name('aceptacion')->middleware('signed');
 
+
+// Route::post('/login/{email}', [LoginController::class, 'login']);
 Route::middleware(['auth:sanctum'])->post('/logout', [LoginController::class, 'logout']);
 
 

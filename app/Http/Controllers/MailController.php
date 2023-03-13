@@ -138,6 +138,7 @@ class MailController extends Controller
                
                 $url= URL::temporarySignedRoute('login', now()->addDays(30),['email' => $request->emailtomsg]);
 
+            
                 $separateUrl=explode('/',$url);
 
                 $auxSeparateUrl = explode('?',$separateUrl[count($separateUrl)-1]);
