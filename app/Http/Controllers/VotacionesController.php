@@ -129,8 +129,8 @@ class VotacionesController extends Controller
         $user_votando = Subcategorias::from('as_edicion_obras AS obras')->select("obras.id", 'obras.descripcion', 'obras.id_cod_particip')->join('as_edicion_cods_particip AS votos','votos.id','=','obras.id_cod_particip')->where('votos.id_edicion',$id_edicion[0]->id)->get();
 
         foreach ($res3 as $subcategoria) {
+            
             $infoCategoria = $this->getResultSpecificSubcat($request, $subcategoria->id,$fase);
-            // return $infoCategoria['informacion'];
             $infoCategoria['id_subcategoria'] = $subcategoria->id;
             $infoCategoria['codigo'] = $subcategoria->id_area.$subcategoria->codigo;
             $infoCategoria['titulo'] = $subcategoria->descrip;
