@@ -38,6 +38,7 @@ class RondasController extends Controller
            $jurado->progreso = $tantoPorciento;
            $totalPorcientojurados = $totalPorcientojurados + $tantoPorciento;
         }
+        
         $respuesta = [];
         $calculoTotal = ($totalPorcientojurados/(count($jurados)*100))*100;
         array_push($respuesta,["calculo_total"=>$calculoTotal],$jurados);
@@ -48,7 +49,6 @@ class RondasController extends Controller
 
     private function calculoIncompatibles($obras,$id_tipojurado){
 
-        
            $contadorObrasIncompatibles = 0;
            $obrasIncompatibles = explode(',',$obras);
 
@@ -59,7 +59,9 @@ class RondasController extends Controller
                     
                     $idTip = AuxTipoJuradoSubCat::select('id_tipojurado')->where('id_subcategoria',$idCod[0]->id_cod_particip)->get();
                     
+                    if(count($idTip)>0){
                     $idTip[0]->id_tipojurado == $id_tipojurado && $contadorObrasIncompatibles++;
+                    }
                 }
             }
            return $contadorObrasIncompatibles;

@@ -123,7 +123,10 @@ class MailController extends Controller
                  
                  $idTip = AuxTipoJuradoSubCat::select('id_tipojurado')->where('id_subcategoria',$idCod[0]->id_cod_particip)->get();
                  
-                 $idTip[0]->id_tipojurado == $id_tipojurado && $contadorObrasIncompatibles++;
+                 if(count($idTip)>0){
+                     
+                     $idTip[0]->id_tipojurado == $id_tipojurado && $contadorObrasIncompatibles++;
+                 }
              }
          }
         return $contadorObrasIncompatibles;
